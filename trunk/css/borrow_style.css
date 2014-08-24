@@ -1,0 +1,34 @@
+/* 
+    Document   : borrow_style
+    Created on : 20-Aug-2014, 18:30:02
+    Author     : poon__000
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+.box_message_50{
+     margin: auto;
+     text-align: center;
+     width: 50%;
+}
+.box_message_75{
+     margin: auto;
+     text-align: center;
+     width: 75%;
+}
+.box_content{
+     margin: auto;
+     text-align: center;
+     width: 50%;
+}
+.box_center{
+     margin: auto;
+     text-align: center;
+     margin-top: 15%;
+     width: 50%;
+}
+
+
