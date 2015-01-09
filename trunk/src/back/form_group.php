@@ -13,10 +13,10 @@ if (!empty($_GET['id'])) {
 }
 ?>
 
-<form action="db_group.php?method=create" method="post" class="form-horizontal">
+<form action="index.php?page=db_group&method=create" method="post" class="form-horizontal">
     <div class="panel panel-success">
         <div class="panel-heading">        
-            <?php echo breadCrumbs('manage_group', 'จัดการ group', 'form_group', 'เพิ่ม group') ?>
+            <?php echo breadCrumbs('manage_group', 'จัดการ กลุ่มสิ่งของวัด', 'form_group', 'เพิ่ม กลุ่มสิ่งของวัด') ?>
         </div>
         <div class="panel-body">
             <div class="form-group">

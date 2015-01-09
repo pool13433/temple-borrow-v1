@@ -4,7 +4,6 @@
 @ob_start();
 @session_start();
 include '../../config/app_connect.php';
-include '../../config/app_function.php';
 
 // 
 switch ($_GET['method']) {
@@ -34,7 +33,7 @@ switch ($_GET['method']) {
 
             if (empty($id)) { // insert
                 // กรณี เพิ่ม
-                $msg = 'INSERT Complete';
+                $msg = 'เพิ่มข้อมูล สำเร็จ';
                 // สร้าง string sql
                 $sql = "INSERT INTO person (per_fname,per_lname";
                 $sql .= " ,per_age,per_birthday,per_idcard,per_address,district_id,province_id";
@@ -45,7 +44,7 @@ switch ($_GET['method']) {
                 $sql .= ")";
             } else { // update
                 // กรณี เพิ่ม
-                $msg = 'UPDATE Complete';
+                $msg = 'แก้ไขข้อมูล สำเร็จ';
                 // สร้าง string sql
                 $sql = "UPDATE person SET ";
                 $sql .= " per_fname = '" . $fname . "'";

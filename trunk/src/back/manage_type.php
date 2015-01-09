@@ -1,7 +1,7 @@
 <?php include '../../config/app_connect.php'; ?>
 <div class="panel panel-success">
     <div class="panel-heading">        
-        <?php echo breadCrumbs('manage_type', 'จัดการ type', 'form_type', 'เพิ่ม type') ?>
+        <?php echo breadCrumbs('manage_type', 'จัดการ ประเภทสิ่งของวัด', 'form_type', 'เพิ่ม ประเภทสิ่งของวัด') ?>
     </div>
     <div class="panel-body">
         <table class="table table-bordered tablePagination">
@@ -9,7 +9,7 @@
                 <tr>
                     <th style="width: 10%">รหัส</th>
                     <th>ชื่อ</th>
-                    <th style="width: 25%;text-align: center;">ACTION</th>
+                    <th style="width: 15%;text-align: center;">ACTION</th>
                 </tr>
             </thead>
             <tbody>

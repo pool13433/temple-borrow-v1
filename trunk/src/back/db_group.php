@@ -3,7 +3,6 @@
 @ob_start();
 @session_start();
 include '../../config/app_connect.php';
-include '../../config/app_function.php';
 
 // 
 switch ($_GET['method']) {

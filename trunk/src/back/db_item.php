@@ -3,7 +3,6 @@
 @ob_start();
 @session_start();
 include '../../config/app_connect.php';
-include '../../config/app_function.php';
 
 // 
 switch ($_GET['method']) {
@@ -17,7 +16,8 @@ switch ($_GET['method']) {
             $name = $_POST['name'];
             $group = $_POST['group'];
             $type = $_POST['type'];
-            $item_no = $_POST['item_no'];
+            $item_total_no = $_POST['item_total_no'];
+            $item_balance_no = $_POST['item_balance_no'];
             $size = $_POST['size'];
             $attribute = $_POST['attribute'];
             $priority = $_POST['priority'];
@@ -26,28 +26,29 @@ switch ($_GET['method']) {
 
             if (empty($id)) { // insert
                 // กรณี เพิ่ม
-                $msg = 'INSERT Complete';
+                $msg = 'เพิ่มข้อมูลสำเร็จ';
                 // สร้าง string sql
-                $sql .= " INSERT INTO `item` (ite_name,gro_id,typ_id,ite_no,siz_id";
+                $sql .= " INSERT INTO `item` (ite_name,gro_id,typ_id,ite_total_no,ite_balance_no,siz_id";
                 $sql .= " ,ite_attribute,ite_priority,ite_status,ite_createdate,ite_remark)";
                 $sql .= " VALUES (";
-                $sql .= " '" . $name . "'," . $group . "," . $type . "," . $item_no . "," . $size;
+                $sql .= " '" . $name . "'," . $group . "," . $type . "," . $item_total_no . "," . $item_balance_no . "," . $size;
                 $sql .= " ,'" . $attribute . "'," . $priority . "," . $status . ",NOW(),'" . $remark . "'";
                 $sql .= " )";
             } else { // update
                 // กรณี เพิ่ม
-                $msg = 'UPDATE Complete';
+                $msg = 'แก้ไขข้อมูลสำเร็จ';
                 // สร้าง string sql
                 $sql .= " UPDATE `item` SET ";
                 $sql .= "  ite_name = '" . $name . "'";
                 $sql .= "  ,gro_id = " . $group;
                 $sql .= "  ,typ_id = " . $type;
-                $sql .= "  ,ite_no = " . $item_no;
-                $sql .= "  ,siz_id = " . $size;
-                $sql .= "  ,ite_attribute = '" . $attribute . "'";
-                $sql .= "  ,ite_priority = " . $priority;
-                $sql .= "  ,ite_status = " . $status;
-                $sql .= "  ,ite_remark = '" . $remark . "'";
+                $sql .= "  ,ite_total_no= " . $item_total_no;
+                $sql .= "  ,ite_balance_no = " . $item_balance_no;
+                $sql .= ", siz_id = " . $size;
+                $sql .= ", ite_attribute = '" . $attribute . "'";
+                $sql .= ", ite_priority = " . $priority;
+                $sql .= ", ite_status = " . $status;
+                $sql .= ", ite_remark = '" . $remark . "'";
                 $sql .= " WHERE ite_id = " . $id;
             }
 
@@ -69,29 +70,52 @@ switch ($_GET['method']) {
         $sql = "DELETE FROM `item` WHERE ite_id = " . $id;
         echo mysql_query($sql) or die(mysql_error());
         break;
-    case 'addnewitem':
+    case 'manageitem':
         $ite_id = $_POST['id'];
         $value = $_POST['ite_no'];
+        $type = $_POST['type'];
         // คืน จำนวน เข้า สต๊อก
-        $total_no = getItemNo($ite_id);
+        $total_no = getItemTotalNo($ite_id);
+        $balance_no = getItemBalanceNo($ite_id);
         // update 
         $sql_item = "UPDATE item SET ";
-        // set ค่า columns ite_no = จำนวน ของที่มี ล่าสุด + จำนวนของ ที่คืน = ของ คงเหลือ
-        $sql_item .= " ite_no = " . ($total_no + $value);
+        if ($type == 0): // แสดงว่ากำลัง ลบ ทรัพยากร
+            // set ค่า columns ite_balance_no = จำนวน ของคงเหลือที่มี ล่าสุด - จำนวนของ = ของ คงเหลือ
+            $sql_item .= " ite_balance_no = " . ($balance_no - $value);
+            // set ค่า columns ite_total_no = จำนวนทั้งหมด ของที่มี ล่าสุด - จำนวนของ = ของ ทั้งหมด
+            $sql_item .= " ,ite_total_no = " . ($total_no - $value);
+        else:// แสดงว่ากำลัง เพิ่ม ทรัพยากร
+            // set ค่า columns ite_balance_no = จำนวน ของคงเหลือที่มี ล่าสุด + จำนวนของ = ของ คงเหลือ
+            $sql_item .= " ite_balance_no = " . ($balance_no + $value);
+            // set ค่า columns ite_total_no = จำนวนทั้งหมด ของที่มี ล่าสุด + จำนวนของ = ของ ทั้งหมด
+            $sql_item .= " ,ite_total_no = " . ($total_no + $value);
+        endif;
         $sql_item .= " WHERE ite_id = " . $ite_id;
-        echo mysql_query($sql_item) or die(mysql_error());        
+        echo mysql_query($sql_item) or die(mysql_error());
         break;
     default:
         break;
 }
 
-function getItemNo($item_id) {
-    $sql = "SELECT * FROM item WHERE ite_id =" . $item_id;
+function getItemTotalNo($item_id) {
+    $sql = "SELECT * FROM item WHERE ite_id = " . $item_id;
     //echo 'getItemNo => sql : ' . $sql;
     $query = mysql_query($sql) or die(mysql_error());
     if ($query) {
         $result = mysql_fetch_assoc($query);
-        return $result['ite_no'];
+        return $result['ite_total_no'];
+    } else {
+        exit();
+    }
+}
+
+function getItemBalanceNo($item_id) {
+    $sql = "SELECT * FROM item WHERE ite_id = " . $item_id;
+    //echo 'getItemNo => sql : ' . $sql;
+    $query = mysql_query($sql) or die(mysql_error());
+    if ($query) {
+        $result = mysql_fetch_assoc($query);
+        return $result['ite_balance_no'];
     } else {
         exit();
     }

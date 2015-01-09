@@ -16,7 +16,7 @@ switch ($_GET['method']) {
             $bor_status = $_POST['bor_status'];
 
             $bor_result = $_POST['bor_result'];
-            $bor_result_claim = $_POST['bor_result_claim'];
+            $bor_remark = $_POST['bor_remark'];
 
             if (!empty($bor_status) && !empty($bor_result)) {
                 if (!empty($bor_status)) {
@@ -25,7 +25,7 @@ switch ($_GET['method']) {
 
                 if (!empty($bor_result)) {
                     $sql .= " ,bor_result = " . $bor_result;
-                    $sql .= " ,bor_result_claim = '" . $bor_result_claim . "'";
+                    $sql .= " ,bor_remark = '" . $bor_remark . "'";
                 }
             } else {
                 if (!empty($bor_status)) {
@@ -34,7 +34,13 @@ switch ($_GET['method']) {
 
                 if (!empty($bor_result)) {
                     $sql .= " bor_result = " . $bor_result;
-                    $sql .= " ,bor_result_claim = '" . $bor_result_claim . "'";
+                    $sql .= " ,bor_remark = '" . $bor_remark . "'";
+                }
+
+                $bor_approve = $_POST['bor_approve'];
+
+                if (!empty($_POST)) {
+                    $sql .= " ,bor_approve = " . $bor_approve;
                 }
             }
 
@@ -69,8 +75,8 @@ switch ($_GET['method']) {
         $total_no = getItemNo($ite_id);
         // update 
         $sql_item = "UPDATE item SET ";
-        // set ค่า columns ite_no = จำนวน ของที่มี ล่าสุด + จำนวนของ ที่คืน = ของ คงเหลือ
-        $sql_item .= " ite_no = " . ($total_no + $value);
+        // set ค่า columns ite_balance_no = จำนวน ของที่มี ล่าสุด + จำนวนของ ที่คืน = ของ คงเหลือ
+        $sql_item .= " ite_balance_no = " . ($total_no + $value);
         $sql_item .= " WHERE ite_id = " . $ite_id;
         $query = mysql_query($sql_item) or die(mysql_error());
 
@@ -82,6 +88,41 @@ switch ($_GET['method']) {
         // ################## end restore item ############
 
         echo mysql_query($sql) or die(mysql_error());
+        break;
+    case 'approveitemnumber':
+        // จ่าย จำนวนของที่มี ใน คลัง
+        // ######### รับค่า จาก form ########
+        $id = $_POST['id'];
+        $value = $_POST['value'];
+        $ite_id = $_POST['ite_id'];
+        // ######### end รับค่า จาก form#####
+
+        $sql = " UPDATE borrow_detail SET ";
+        $sql .= " bordet_approve_no = " . $value;
+        $sql .= " WHERE bordet_id = " . $id;
+
+        // ##################  restore item ###############
+        // คืน จำนวน เข้า สต๊อก
+        $total_no = getItemNo($ite_id);
+        // update 
+        $sql_item = "UPDATE item SET ";
+        // set ค่า columns ite_balance_no = จำนวน ของที่มี ล่าสุด - จำนวนของ ที่คืน = ของ คงเหลือ
+        $sql_item .= " ite_balance_no = " . ($total_no - $value);
+        $sql_item .= " WHERE ite_id = " . $ite_id;
+        $query = mysql_query($sql_item) or die(mysql_error());
+
+        // ตรวจสอบ ถ้า เกิดข้อผิดพลาด ให้ หยุดการทำงาน
+        if (!$query) {
+            echo ' approve stock fail';
+            exit();
+        }
+        // ################## end restore item ############
+
+        echo mysql_query($sql) or die(mysql_error());
+        break;
+    case 'delete':
+        $id = $_POST['id'];
+        echo mysql_query("DELETE FROM borrow_detail WHERE bordet_id = $id") or die(mysql_error());
         break;
     default:
         echo ' no method';
@@ -101,8 +142,8 @@ function cutStockAsset($bor_id) {
 
         // update 
         $sql_item = "UPDATE item SET ";
-        // set ค่า columns ite_no = จำนวน ของที่มี ล่าสุด - จำนวนของ ที่ยืม = ของ คงเหลือ
-        $sql_item .= " ite_no = " . ($total_no - $row['bordet_no']);
+        // set ค่า columns ite_balance_no = จำนวน ของที่มี ล่าสุด - จำนวนของ ที่ยืม = ของ คงเหลือ
+        $sql_item .= " ite_balance_no = " . ($total_no - $row['bordet_no']);
         $sql_item .= " WHERE ite_id = " . $row['ite_id'];
         $query = mysql_query($sql_item) or die(mysql_error());
 
@@ -121,7 +162,7 @@ function getItemNo($item_id) {
     $query = mysql_query($sql) or die(mysql_error());
     if ($query) {
         $result = mysql_fetch_assoc($query);
-        return $result['ite_no'];
+        return $result['ite_balance_no'];
     } else {
         exit();
     }

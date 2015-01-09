@@ -3,7 +3,6 @@
 @ob_start();
 @session_start();
 include '../../config/app_connect.php';
-include '../../config/app_function.php';
 
 // 
 switch ($_GET['method']) {
@@ -19,7 +18,7 @@ switch ($_GET['method']) {
 
             if (empty($id)) { // insert
                 // กรณี เพิ่ม
-                $msg = 'INSERT Complete';
+                $msg = 'เพิ่มข้อมูลสำเร็จ';
                 // สร้าง string sql
                 $sql .= " INSERT INTO `size` (siz_name,gro_id,siz_createdate)";
                 $sql .= " VALUES (";
@@ -27,7 +26,7 @@ switch ($_GET['method']) {
                 $sql .= " )";
             } else { // update
                 // กรณี เพิ่ม
-                $msg = 'UPDATE Complete';
+                $msg = 'แก้ไขข้อมูลสำเร็จ';
                 // สร้าง string sql
                 $sql .= " UPDATE `size` SET ";
                 $sql .= "  siz_name = '" . $name . "'";

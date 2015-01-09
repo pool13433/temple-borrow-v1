@@ -6,15 +6,16 @@
     <div class="panel-body">
         <table class="table table-bordered tablePagination">
             <thead>
-                <tr>
-                    <th style="width: 10%">รหัส</th>
+                <tr>                    
+                    <th>รหัส</th>                    
+                    <th></th>
                     <th>วันมารับของ</th>
                     <th>วันใช้งาน</th>
                     <th>วันคืนของ</th>
                     <th>จำนวนของ / รายการ</th>
                     <th>สถานะการยืม</th>
                     <th>สถานะการอนุมัติ</th>
-                    <th style="width: 15%;text-align: center;">ACTION</th>
+                    <th style="width: 12%;text-align: center;">ACTION</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,8 +26,7 @@
                 //$sql .= " WHERE br.bor_status <> 6"; // ไม่เอาที่ยกเลิก ไปแล้ว 6 = ยกเลิกไปแล้ว
                 $sql .= "";
                 $sql .= " AND br.per_id = " . $_SESSION['person']['per_id'];
-                $sql .= " ORDER BY bor_id";
-
+                $sql .= " ORDER BY br.bor_id desc"; // date(br.bor_createdate),
                 // แสดง sql
                 echo printSql($sql);
 
@@ -34,70 +34,21 @@
                 $record = mysql_num_rows($query);
                 ?>
                 <?php while ($row = mysql_fetch_array($query)) : ?>
-                    <tr>
+                    <tr>         
+                        <td><?= $row['bor_id'] ?></td>
                         <td>
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target=".zoom<?= $row['bor_id'] ?>">
-                                <i class="glyphicon glyphicon-zoom-in"></i><?= $row['bor_id'] ?>
-                            </button>
-
-                            <!--modal-->
-                            <div class="modal fade zoom<?= $row['bor_id'] ?>" 
-                                 tabindex="-1" role="dialog" 
-                                 aria-labelledby="myLargeModalLabel" 
-                                 aria-hidden="true"
-                                 data-backdrop="static">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header alert alert-info">
-                                            <a class="close" data-dismiss="modal">&times;</a>
-                                            <i class="glyphicon glyphicon-wrench"></i> รายการ สิ่งของที่ ยืม
-                                        </div>
-                                        <div class="modal-body">
-                                            <?php
-                                            $sql_zoom = "SELECT * FROM borrow_detail bd";
-                                            $sql_zoom .=" JOIN item i ON i.ite_id = bd.ite_id";
-                                            $sql_zoom .=" ";
-                                            $sql_zoom .= " WHERE bd.bor_id = " . $row['bor_id'];
-                                            $query_zoom = mysql_query($sql_zoom) or die(mysql_error());
-                                            ?>
-                                            <table class="table table-bordered tablePagination">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width: 10px;">รหัส สิ่งของ</th>
-                                                        <th style="width: ">ชื่อ</th>
-                                                        <th style="width: 10px;">ความสำคัญ</th>
-                                                        <th style="width: 15px;">จำนวน ที่ยืม</th>
-                                                    </tr>                                                        
-                                                </thead>
-                                                <tbody>
-                                                    <?php while ($row_zoom = mysql_fetch_array($query_zoom)) : ?>
-                                                        <tr>
-                                                            <td><?= $row_zoom['bordet_id'] ?></td>
-                                                            <td><?= $row_zoom['ite_name'] ?></td>
-                                                            <td>
-                                                                <?php if ($row_zoom['ite_priority'] == 1): ?>
-                                                                    <h5><label class="label label-success"> ทรพย์สิน ธรรมดา</label></h5>
-                                                                <?php else: ?>
-                                                                    <h5><label class="label label-primary"> ทรพย์สิน พิเศษ</label></h5>
-                                                                <?php endif; ?>
-                                                            </td>
-                                                            <td><?= $row_zoom['bordet_no'] ?></td>
-                                                        </tr>
-                                                    <?php endwhile; ?>
-                                                </tbody>
-                                            </table>                                            
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a class="btn btn-danger btn-sm" data-dismiss="modal">
-                                                <i class="glyphicon glyphicon-remove-sign"></i> ปิด
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--modal-->
-
-                        </td>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target=".zoom<?= $row['bor_id'] ?>">
+                                        <i class="glyphicon glyphicon-zoom-in"></i>
+                                    </button>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="index.php?page=main_cart&id=<?= $row['bor_id'] ?>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> แก้ไขของยืม</a>
+                                </li>
+                            </ul>
+                            <?php include './view_item.php'; ?>
+                        </td>                        
                         <td><?= $row['bor_get'] ?></td>
                         <td><?= $row['bor_start'] ?></td>
                         <td><?= $row['bor_end'] ?></td>                        
@@ -132,11 +83,25 @@
                         </td>
                         <td style="text-align: center;">
                             <?php if ($row['bor_status'] != 6): ?>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-warning btn-sm" onclick="return updateBorrowStatus(<?= $row['bor_id'] ?>, 6)">
-                                        <i class="glyphicon glyphicon-trash"></i> CANCLE    
-                                    </button>  
-                                </div>
+                                <ul class="list-group">
+                                    <?php if ($row['bor_status'] == 1): ?>
+                                        <li class="list-group-item">
+                                            <a href="index.php?page=main_borrow&id=<?= $row['bor_id'] ?>" class="btn btn-info btn-sm">
+                                                <i class="glyphicon glyphicon-pencil"></i> แก้ไขใบยืม    
+                                            </a>  
+                                        </li>
+                                    <?php endif; ?>
+                                    <li class="list-group-item">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="return updateBorrowStatus(<?= $row['bor_id'] ?>, 6)">
+                                            <i class="glyphicon glyphicon-trash"></i> ยกเลิก    
+                                        </button>  
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="pdf_borrow.php?id=<?= $row['bor_id'] ?>" target="_blank" class="btn btn-success btn-sm">
+                                            <i class="glyphicon glyphicon-print"></i> ปริ้น    
+                                        </a>  
+                                    </li>
+                                </ul>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -144,7 +109,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="7"></th>
+                    <th colspan="8"></th>
                     <th style="text-align: center;">
             <h3><label class="label label-info">รวม {  <?= $record ?>  }</label></h3>
             </th>

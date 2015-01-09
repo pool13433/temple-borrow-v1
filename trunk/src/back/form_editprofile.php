@@ -56,7 +56,7 @@ if (!empty($_GET['id'])) {
 }
 ?>
 <!--  form-->
-<form action="db_person.php?method=<?= $method ?>" method="post" name="register-form" class="form-horizontal">
+<form action="index.php?page=db_person&method=<?= $method ?>" method="post" name="register-form" class="form-horizontal">
     <div class="panel-group" id="accordion">                
         <div class="panel panel-default">
             <div class="panel-heading">

@@ -1,13 +1,13 @@
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
-        <div class="navbar-header">                   
+        <!--<div class="navbar-header">                   
             <a class="navbar-brand" href="#">Temple Asset 2014</a>
-        </div>
+        </div>-->
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="index.php?page=main_temple_borrow">ประวัติการยืม</a></li>
-                <li><a href="index.php?page=main_item">สิ่งของ</a></li>
-                <li><a href="index.php?page=main_cart">ยืม</a></li>                        
+                <li><a href="index.php?page=main_item">สิ่งของวัดทั้งหมด</a></li>
+                <li><a href="index.php?page=main_cart"><i class="glyphicon glyphicon-gift"></i> จัดการยืมของ</a></li>                        
             </ul>
             <form class="nav navbar-form navbar-left" role="search" id="search-form">
                 <div class="form-group">
@@ -19,12 +19,16 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <button type="button" class="btn btn-default btn-lg"  data-toggle="modal" data-target=".editprofile">
-                        <label class="label label-succes alert alert-success">
-                            ชื่อ <?= $_SESSION['person']['per_fname'] . " " . $_SESSION['person']['per_lname'] ?>
-                            <i class="glyphicon glyphicon-edit lg"></i> แก้ไขข้อมูล
-                        </label>
-                    </button>
+                    <!--                    <button type="button" class="btn btn-default btn-lg"  data-toggle="modal" data-target=".editprofile">
+                                            <label class="label label-succes alert alert-success">
+                                                ชื่อ <?= $_SESSION['person']['per_fname'] . " " . $_SESSION['person']['per_lname'] ?>
+                                                <i class="glyphicon glyphicon-edit lg"></i> แก้ไขข้อมูล
+                                            </label>
+                                        </button>-->
+                    <a href="index.php?page=form_editprofile" class="btn btn-warning">
+                        ชื่อ <?= $_SESSION['person']['per_fname'] . " " . $_SESSION['person']['per_lname'] ?>
+                        <i class="glyphicon glyphicon-edit lg"></i> แก้ไขข้อมูล
+                    </a>
                 </li>
                 <li>                            
                     <a href="#" onclick="return logout()">
@@ -50,8 +54,8 @@
                 <a class="close" data-dismiss="modal">&times;</a>
                 <i class="glyphicon glyphicon-shopping-cart"></i> แก้ไขข้อมูลสส่วนตัว
             </div>
-            <div class="modal-body">
-                edit profile
+            <div class="modal-body">                
+                <?php //include './form_editprofile.php';?>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-primary btn-sm" id="btn_save" >

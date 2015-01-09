@@ -26,19 +26,17 @@
         <script type="text/javascript" src="../../js/borrow_script.js"></script>
     </head>   
     <body>
-        <div class="container-fluid" style="margin-top: 20px;">
+        <?php include './menu_top.php';?>
+        <div class="container-fluid" style="margin-top: 50px;">
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="jumbotron alert alert-link">
-                        <h1>โปรแกรม ยืมคืน วัสดุ</h1>
+                        <h1>ระบบบริหารจัดการของวัด</h1>
                         <p>กรณีศึกษา วัดเหล่าอ้อย</p>
                     </div>
                 </div>
                 <div class="panel-body" style="margin: auto;">
-                    <div class="col-md-2">         
-                        <?php include './menu_left.php'; ?>
-                    </div>
-                    <div class="col-md-10">
+                    <div class="col-md-12">
                         <?php
                         // ตรวจสอบ ค่า ว่ามีการส่งค่ามาหรือเปล่า
                         if (!empty($_GET)) {  // มีค่า

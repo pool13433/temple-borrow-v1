@@ -1,6 +1,16 @@
 <div class="panel panel-success">
     <div class="panel-heading">        
-        ผลการค้นหา
+        <div class="row">
+            <div class="col-md-2">
+                ผลการค้นหา
+            </div>
+            <div class="col-md-8"></div>
+            <div class="col-md-2">
+                <?php if (!empty($_SESSION['borrow_confirm_id'])): ?>
+                    <button type="button" class="btn btn-primary" onclick="return newCart()">ยืมตะกร้าใหม่</button>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
     <div class="panel-body" id="content">
         <?php
@@ -11,6 +21,7 @@
         $sql .= " JOIN `type` t ON t.typ_id = i.typ_id";
         $sql .= " JOIN `size` s ON s.siz_id = i.siz_id";
         $sql .= " WHERE 1=1";
+        $sql .= " AND i.ite_balance_no > 0";
         if (!empty($_POST)) {
 
             $search = $_POST['search'];
@@ -20,7 +31,7 @@
             $sql .= " OR gro_name LIKE '%" . $search . "%'";
             $sql .= " OR typ_name LIKE '%" . $search . "%'";
             $sql .= " OR siz_name LIKE  '%" . $search . "%'";
-            $sql .= " OR ite_no LIKE  '%" . $search . "%'";
+            $sql .= " OR ite_balance_no LIKE  '%" . $search . "%'";
             $sql .= " )";
         }
         // แสดง sql
@@ -73,7 +84,7 @@
                             </td>                          
                             <td><?= $row['siz_name'] ?></td>
                             <td>
-                                <h4><label class="label label-warning"><?= $row['ite_no'] . " " . $row['typ_name'] ?></label></h4>
+                                <h4><label class="label label-warning"><?= $row['ite_balance_no'] . " " . $row['typ_name'] ?></label></h4>
                             </td>
                             <td style="text-align: center;">
                                 <div class="btn-group">
@@ -134,31 +145,45 @@
 </div>
 
 <script type="text/javascript">
-                                                    function saveCart(id) {
-                                                        var value = $('#item' + id).val();
-                                                        if (parseInt(value)) {
-                                                            $.ajax({
-                                                                url: 'db_borrow_detail.php?method=additem',
-                                                                data: {
-                                                                    id: id,
-                                                                    value: value
-                                                                },
-                                                                type: 'post',
-                                                                success: function(data) {
-                                                                    if (data == 1) {
-                                                                        window.location = 'index.php?page=main_cart';
-                                                                    } else {
-                                                                        alert(' เพิ่ม ไม่สำเร็จ');
-                                                                    }
-                                                                }
-                                                            });
-                                                        } else {
-                                                            alert(' กรุณากรอก ตัวเลขเท่านั้น');
-                                                            return false;
-                                                        }
+    function newCart() {
+        if (confirm('ยืนยันการสร้าง ใบยืม ใหม่ ? ใช่หรือ ไม่')) {
+            $.ajax({
+                url: 'db_borrow.php?method=newcart',
+                success: function(data) {
+                    alert(data);
+                    window.location.reload();
+                }
+            });
+            return true;
+        }
+        return false;
 
-                                                    }
-                                                    $('.popover-dismiss').popover({
-                                                        trigger: 'hover'
-                                                    })
+    }
+    function saveCart(id) {
+        var value = $('#item' + id).val();
+        if (parseInt(value)) {
+            $.ajax({
+                url: 'db_borrow_detail.php?method=additem',
+                data: {
+                    id: id,
+                    value: value
+                },
+                type: 'post',
+                success: function(data) {
+                    if (data == 1) {
+                        window.location = 'index.php?page=main_cart';
+                    } else {
+                        alert(' เพิ่ม ไม่สำเร็จ');
+                    }
+                }
+            });
+        } else {
+            alert(' กรุณากรอก ตัวเลขเท่านั้น');
+            return false;
+        }
+
+    }
+    $('.popover-dismiss').popover({
+        trigger: 'hover'
+    })
 </script>

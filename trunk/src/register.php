@@ -148,42 +148,50 @@ include '../config/app_connect.php';
                                 </div>
                                 <div class="form-group">                                    
                                     <div class="col-sm-6">
-                                        <label class="col-sm-4">จังหวัด</label>
-                                        <div class="col-sm-6">                                            
-                                            <select class="form-control" name="province" id="province"  required>
-                                                <option value=""> -- เลือก --</option>
-                                                <?php
-                                                $sql_province = "SELECT * FROM provinces ORDER BY province_name asc";
-                                                $query = mysql_query($sql_province) or die(mysql_error());
-                                                while ($row = mysql_fetch_array($query)):
-                                                    ?>
-                                                    <option value="<?= $row['province_id'] ?>"><?= $row['province_name'] ?></option>
+                                        <label class="col-sm-4">ตำบล</label>
+                                        <div class="col-sm-6">
+                                            <?php $sql_distrint = "SELECT * FROM districts WHERE district_id = 1745"; ?>
+                                            <?php $query_distrint = mysql_query($sql_distrint) or die(mysql_error()) ?>
+                                            <select class="form-control" name="district" id="district" readonly="true">
+                                                <?php while ($row2 = mysql_fetch_array($query_distrint)): ?>
+                                                    <option value="<?= $row2['district_id'] ?>" selected="true"><?= $row2['district_name'] ?></option>
                                                 <?php endwhile; ?>
                                             </select>
-                                        </div> 
+                                        </div>                                         
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="col-sm-4">อำเภอ</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" name="amphure" id="amphure" required>
-
+                                            <?php $sql_amphur = "SELECT * FROM amphures WHERE amphur_id = 211"; ?>
+                                            <?php $query_anphue = mysql_query($sql_amphur) or die(mysql_error()) ?>
+                                            <select class="form-control" name="amphure" id="amphure" readonly="true">
+                                                <?php while ($row1 = mysql_fetch_array($query_anphue)) : ?>
+                                                    <option value="<?= $row1['amphur_id'] ?>" selected="true"><?= $row1['amphur_name'] ?></option>
+                                                <?php endwhile; ?>
                                             </select>
                                         </div> 
                                     </div>
                                 </div>
                                 <div class="form-group">                                    
                                     <div class="col-sm-6">
-                                        <label class="col-sm-4">ตำบล</label>
-                                        <div class="col-sm-6">
-                                            <select class="form-control" name="district" id="district" required>
-
+                                        <label class="col-sm-4">จังหวัด</label>
+                                        <div class="col-sm-6">                                            
+                                            <select class="form-control" name="province" id="province" readonly="true"  required>
+                                                <!--                                                <option value=""> -- เลือก --</option>-->
+                                                <?php
+                                                $sql_province = "SELECT * FROM provinces WHERE province_id = 18 ORDER BY province_name asc";
+                                                $query_province = mysql_query($sql_province) or die(mysql_error());
+                                                while ($row = mysql_fetch_array($query_province)):
+                                                    ?>
+                                                    <option value="<?= $row['province_id'] ?>" selected="true"><?= $row['province_name'] ?></option>
+                                                <?php endwhile; ?>
                                             </select>
                                         </div> 
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="col-sm-4">รหัสไปรษณีย์</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="zipcode" id="zipcode"/>
+                                            <input type="text" class="form-control" name="zipcode" id="zipcode" readonly="true" value="27120"/>
                                         </div> 
                                     </div>
                                 </div>
@@ -226,52 +234,61 @@ include '../config/app_connect.php';
     </div>
 </form>
 <script type="text/javascript">
-                $(document).ready(function() {
-                    $('#province').change(function() {
-                        var province_id = $('#province').val();
-                        renderProvinceAmphure(province_id, 'back');
-                    });
-                    $('#amphure').change(function() {
-                        var amphur_id = $('#amphure').val();
-                        renderAmphurDistrict(amphur_id, 'back');
-                    });
-                    $('#district').change(function() {
-                        var district_code = $('#district').val();
-                        renderDistrictZipcode(district_code, 'back');
-                    });
-                });
-                function checkFormRegister() {
-                    var msg = '';
-                    var username = $('input[name=username]').val();
-                    var password = $('input[name=password]').val();
-                    var fname = $('input[name=fname]').val();
-                    var lname = $('input[name=lname]').val();
-                    var age = $('input[name=age]').val();
-                    var birthday = $('input[name=birthday]').val();
-                    var idcard = $('input[name=idcard]').val();
-                    var address = $('input[name=address]').val();
-                    var district = $('input[name=district]').val();
-                    var province = $('input[name=province]').val();
-                    var amphure = $('input[name=amphure]').val();
-                    var zipcode = $('input[name=zipcode]').val();
+    $(document).ready(function() {
+        // ################# onload combobox #################
+        // 18 สระแก้ว
+        // 211 อรัญ
+        // 1745 หนองสังข์
+        //
+        /*renderProvinceAmphure(211, 'back');
+         renderAmphurDistrict(1745, 'back');
+         renderDistrictZipcode(270610, 'back');*/
+        // #################end onload combobox ##############
+        /* $('#province').change(function() {
+         var province_id = $('#province').val();
+         renderProvinceAmphure(province_id, 'back');
+         });
+         $('#amphure').change(function() {
+         var amphur_id = $('#amphure').val();
+         renderAmphurDistrict(amphur_id, 'back');
+         });
+         $('#district').change(function() {
+         var district_code = $('#district').val();
+         renderDistrictZipcode(district_code, 'back');
+         });*/
+    });
+    function checkFormRegister() {
+        var msg = '';
+        var username = $('input[name=username]').val();
+        var password = $('input[name=password]').val();
+        var fname = $('input[name=fname]').val();
+        var lname = $('input[name=lname]').val();
+        var age = $('input[name=age]').val();
+        var birthday = $('input[name=birthday]').val();
+        var idcard = $('input[name=idcard]').val();
+        var address = $('input[name=address]').val();
+        var district = $('input[name=district]').val();
+        var province = $('input[name=province]').val();
+        var amphure = $('input[name=amphure]').val();
+        var zipcode = $('input[name=zipcode]').val();
 
-                    if (username == '') {
-                        msg += ' กรุณากรอกข้อมูล username \n';
-                    }
-                    if (password == '') {
-                        msg += ' กรุณากรอกข้อมูล password \n';
-                    }
-                    if (fname == '') {
-                        msg += ' กรุณากรอกข้อมูล fname \n';
-                    }
-                    if (lname == '') {
-                        msg += ' กรุณากรอกข้อมูล lname \n';
-                    }
-                    if (msg == '') {
-                        return true
-                    } else {
-                        alert(msg);
-                        return false;
-                    }
-                }
+        if (username == '') {
+            msg += ' กรุณากรอกข้อมูล username \n';
+        }
+        if (password == '') {
+            msg += ' กรุณากรอกข้อมูล password \n';
+        }
+        if (fname == '') {
+            msg += ' กรุณากรอกข้อมูล fname \n';
+        }
+        if (lname == '') {
+            msg += ' กรุณากรอกข้อมูล lname \n';
+        }
+        if (msg == '') {
+            return true
+        } else {
+            alert(msg);
+            return false;
+        }
+    }
 </script>

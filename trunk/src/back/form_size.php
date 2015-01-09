@@ -18,10 +18,10 @@ if (!empty($_GET['id'])) {
 }
 ?>
 
-<form action="db_size.php?method=create" method="post" class="form-horizontal">
+<form action="index.php?page=db_size&method=create" method="post" class="form-horizontal">
     <div class="panel panel-success">
         <div class="panel-heading">        
-            <?php echo breadCrumbs('manage_size', 'จัดการ size', 'form_size', 'เพิ่ม size') ?>
+            <?php echo breadCrumbs('manage_szie', 'จัดการ ขนาดสิ่งของวัด', 'form_size', 'เพิ่ม ขนาดสิ่งของวัด') ?>
         </div>
         <div class="panel-body">
             <div class="form-group">

@@ -1,4 +1,13 @@
 <?php include '../../config/app_connect.php'; ?>
+<?php
+$readonly_approve = "";
+$readonly_return = "";
+if ($_GET['type'] == 'approve') {
+    $readonly_return = 'readonly';
+} else {
+    $readonly_approve = 'readonly';
+}
+?>
 <div class="panel panel-success">
     <div class="panel-heading">        
         <i class="glyphicon glyphicon-shopping-cart"></i> รายการของที่จะยืม
@@ -10,7 +19,8 @@
                     <th style="width: 14%;text-align: center;">รหัส</th>
                     <th>ชื่อ</th>                    
                     <th style="width: 15%;text-align: center;">จำนวนที่ยืม</th>
-                    <th style="width: 15%;text-align: center;">จำนวนที่คืน</th>
+                    <th style="width: 15%;text-align: center;">จำนวนที่อนุมัติยืม</th>
+                    <th style="width: 15%;text-align: center;">จำนวนที่รับคืน</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,11 +29,11 @@
                 $sql .= " LEFT JOIN item i ON i.ite_id = bd.ite_id";
                 $sql .= " JOIN borrow br ON br.bor_id = bd.bor_id";
                 $sql .= " WHERE 1= 1";
-                //$sql .= " bd.bordet_createdate = date(NOW())";
-                //$sql .= " AND br.bor_status = 0";
+//$sql .= " bd.bordet_createdate = date(NOW())";
+//$sql .= " AND br.bor_status = 0";
                 $sql .= " AND bd.bor_id = " . $_GET['id'];
                 $sql .= " ORDER BY bd.bordet_id ASC";
-                // แสดง sql
+// แสดง sql
                 echo printSql($sql);
 
                 $query = mysql_query($sql) or die(mysql_error());
@@ -38,8 +48,11 @@
                             <input type="hidden" name="ite_id" value="<?= $row['ite_id'] ?>"/>
                             <input type="text" class="form-control" name="borrow" id="<?= $row['bordet_id'] ?>" value="<?= $row['bordet_no'] ?>" readonly="true"/>
                         </td>
+                        <td>                            
+                            <input type="text" class="form-control" name="approve" id="<?= $row['bordet_id'] ?>" value="<?= $row['bordet_no'] ?>" onchange="return checkNumber(this)" <?=$readonly_approve?>/>
+                        </td>
                         <td>
-                            <input type="text" class="form-control" name="return" value="<?= $row['bordet_return_no'] ?>" onchange="return checkNumber(this)"/>
+                            <input type="text" class="form-control" name="return" value="<?= $row['bordet_return_no'] ?>" onchange="return checkNumber(this)" <?=$readonly_return?>/>
                         </td>
                     </tr>
                     <?php $i++; ?>
@@ -66,6 +79,7 @@
                 รวม<input type="text" class="form-control " id="total" value="<?= $count_total ?> " readonly="true"/>
             </div>            
             </th>
+            <th></th>
             <th>
             <div class="row-offcanvas col-sm-12 radio-inline">               
                 รวม<input type="text" class="form-control " id="total" value="<?= $count_return ?> " readonly="true"/>
@@ -95,13 +109,17 @@
                                         row_tr.each(function(index, tr) { // start loop
                                             var td = $(tr).children('td');
                                             var input_ite_id = td.find('input[name=ite_id]').val();
-                                            var input_1 = td.find('input[name=borrow]').val();
+                                            var input_borrow = td.find('input[name=borrow]').val();
+                                            var input_approve = td.find('input[name=approve]').val();
                                             var id = td.find('input[name=borrow]').attr('id');
-                                            var input_2 = td.find('input[name=return]').val();
+                                            var input_return = td.find('input[name=return]').val();
                                             //alert(' index :' + index + ' input_1 : ' + input_1 + ' id : ' + id + '  input_2 : ' + input_2);
-                                            if (input_1 != input_2) { // check number
-                                                updateBorrow(id, input_2, input_ite_id);
+                                            if (input_borrow != input_return) { // check number
+                                                updateBorrow(id, input_return, input_ite_id,'db_borrow.php?method=checkupdateitem');
                                             }
+                                            if(input_approve!=""){
+                                                updateBorrow(id, input_approve, input_ite_id,'db_borrow.php?method=approveitemnumber');
+                                            }                                            
                                         });
                                         window.location = 'index.php?page=manage_borrow';
                                         return true;
@@ -117,9 +135,10 @@
                                     element.focus();
                                 }
                             }
-                            function updateBorrow(id, value, ite_id) {
+                            function updateBorrow(id, value, ite_id,url) {
                                 $.ajax({
-                                    url: 'db_borrow.php?method=checkupdateitem',
+                                    //url: 'db_borrow.php?method=checkupdateitem',
+                                    url : url,
                                     data: {
                                         id: id,
                                         value: value,
