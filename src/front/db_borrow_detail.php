@@ -21,22 +21,42 @@ switch ($_GET['method']) {
         //echo 'sql : ' . $sql;
         echo mysql_query($sql) or die(mysql_error());
         break;
-
+    case 'deleteAll':
+        $sql = "DELETE FROM borrow_detail WHERE bor_id = " . $_SESSION['borrow_id'];
+        echo mysql_query($sql) or die(mysql_error());
+        break;
+    case 'edit_item':
+        $value = $_POST['value'];
+        $id = $_POST['id'];
+        $sql = "UPDATE borrow_detail SET ";
+        $sql .= " bordet_no = $value";
+        $sql .= " WHERE bordet_id = $id";
+        $query = mysql_query($sql) or die(mysql_error());
+//        if() {
+//            
+//        } else {
+//            
+//        }
+        break;
     default:
         break;
 }
 
 function createNewCart() {
     $borrow_id = "";
-    if (empty($_SESSION['borrow_id'])) {
-        $sql = "INSERT INTO borrow";
-        $sql .= " (per_id,bor_createdate)VALUES(";
-        $sql .= $_SESSION['person']['per_id'] . ",NOW())";
-        mysql_query($sql) or die(mysql_error());
-        $borrow_id = mysql_insert_id();
-        $_SESSION['borrow_id'] = $borrow_id;
+    if (!empty($_SESSION['borrow_confirm_id'])) {
+        $borrow_id = $_SESSION['borrow_confirm_id'];
     } else {
-        $borrow_id = $_SESSION['borrow_id'];
+        if (empty($_SESSION['borrow_id'])) {
+            $sql = "INSERT INTO borrow";
+            $sql .= " (per_id,bor_createdate)VALUES(";
+            $sql .= $_SESSION['person']['per_id'] . ",NOW())";
+            mysql_query($sql) or die(mysql_error());
+            $borrow_id = mysql_insert_id();
+            $_SESSION['borrow_id'] = $borrow_id;
+        } else {
+            $borrow_id = $_SESSION['borrow_id'];
+        }
     }
     return $borrow_id;
 }

@@ -11,19 +11,28 @@ switch ($_GET['method']) {
         $msg = 'INSERT Complete';
 
         $borrow_id = $_SESSION['borrow_id'];
+        if (!empty($_SESSION['borrow_confirm_id'])) {
+            $borrow_id = $_SESSION['borrow_confirm_id'];
+        }
         $bor_get = $_POST['bor_get'];
         $bor_start = $_POST['bor_start'];
         $bor_end = $_POST['bor_end'];
-        $bor_detail = $_POST['bor_detail'];
+        $bor_reason = $_POST['bor_reason'];
+
 
         $sql = "UPDATE borrow SET ";
         $sql .= " bor_get = '" . $bor_get . "'";
         $sql .= " ,bor_start = '" . $bor_start . "'";
         $sql .= " ,bor_end = '" . $bor_end . "'";
-        $sql .= " ,bor_detail = '" . $bor_detail . "'";
+        $sql .= " ,bor_reason = " . $bor_reason;
+        if (!empty($_POST['bor_detail'])) {
+            $bor_detail = $_POST['bor_detail'];
+            $sql .= " ,bor_detail = '" . $bor_detail . "'";
+        }
         $sql .= " ,bor_status = 1";  // รอ การมายืม = 1
         $sql .= " WHERE bor_id = " . $borrow_id;
-
+        //echo '$sql : ' + $sql;
+        //exit();
         $query = mysql_query($sql) or die(mysql_error());
 
         // ตรวจสอบ 
@@ -43,8 +52,13 @@ switch ($_GET['method']) {
         $value = $_POST['value'];
         $sql = "UPDATE borrow SET ";
         $sql .= " bor_status = " . $value;
-        $sql .= " WHERE bor_id = " . $id;        
+        $sql .= " WHERE bor_id = " . $id;
         echo mysql_query($sql) or die(mysql_error());
+        break;
+    case 'newcart':
+        unset($_SESSION['borrow_id']);
+        unset($_SESSION['borrow_confirm_id']);
+        echo 'เริ่ม เลือกของตะกร้าใหม่ได้';
         break;
     default:
         break;

@@ -1,4 +1,4 @@
-<form action="db_person.php?method=changepassword" method="post" name="changpassword-form" class="form-horizontal">
+<form action="index.php?page=db_person&method=changepassword" method="post" name="changpassword-form" class="form-horizontal">
     <div class="panel-group" id="accordion">
         <div class="panel panel-default">
             <div class="panel-heading">

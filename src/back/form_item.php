@@ -5,7 +5,8 @@ $id = "";
 $name = "";
 $group = "";
 $type = "";
-$no = "";
+$no_total = "";
+$no_balance = "";
 $size = "";
 $attribute = "";
 $priority = "";
@@ -28,7 +29,8 @@ if (!empty($_GET['id'])) {
     $name = $row['ite_name'];
     $group = $row['gro_id'];
     $type = $row['typ_id'];
-    $no = $row['ite_no'];
+    $no_total = $row['ite_total_no'];
+    $no_balance = $row['ite_balance_no'];
     $size = $row['siz_id'];
     $attribute = $row['ite_attribute'];
     $priority = $row['ite_priority'];
@@ -37,10 +39,10 @@ if (!empty($_GET['id'])) {
 }
 ?>
 
-<form action="db_item.php?method=create" method="post" class="form-horizontal">
+<form action="index.php?page=db_item&method=create" method="post" class="form-horizontal">
     <div class="panel panel-success">
         <div class="panel-heading">        
-            <?php echo breadCrumbs('manage_item', 'จัดการ item', 'form_item', 'เพิ่ม item') ?>
+            <?php echo breadCrumbs('manage_item', 'จัดการ สิ่งของวัด', 'form_item', 'เพิ่ม สิ่งของวัด') ?>
         </div>
         <div class="panel-body">
             <div class="form-group">
@@ -55,7 +57,7 @@ if (!empty($_GET['id'])) {
             <div class="form-group">
                 <div class="col-sm-6">
                     <label class="col-sm-4">กลุ่ม</label>
-                    <div class="col-sm-6" style="color: white">
+                    <div class="col-sm-4" style="color: white">
                         <select name="group" class="form-control" required>
                             <option value="" > -- เลือก --</option>
                             <?php
@@ -74,7 +76,7 @@ if (!empty($_GET['id'])) {
                 </div> 
                 <div class="col-sm-6">
                     <label class="col-sm-4">ประเภท</label>
-                    <div class="col-sm-6" style="color: white">
+                    <div class="col-sm-3" style="color: white">
                         <select name="type" class="form-control" required>
                             <option value="" > -- เลือก --</option>
                             <?php
@@ -94,35 +96,11 @@ if (!empty($_GET['id'])) {
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <label class="col-sm-4">จำนวน</label>
-                    <div class="col-sm-6" style="color: white">
-                        <input type="number" class="form-control" name="item_no" value="<?= $no ?>" required/>
+                    <label class="col-sm-4">จำนวน ทั้งหมด</label>
+                    <div class="col-sm-4" style="color: white">
+                        <input type="number" class="form-control" name="item_total_no" value="<?= $no_total ?>" required/>
                     </div> 
-                </div> 
-                <div class="col-sm-6">
-                    <label class="col-sm-4">เบอร์</label>
-                    <div class="col-sm-6" style="color: white">
-                        <select name="size" class="form-control" required>
-                            <option value="" > -- เลือก --</option>
-                            <?php
-                            $sql_size = "SELECT * FROM `size` ORDER BY siz_name";
-                            $query_size = mysql_query($sql_size) or die(mysql_error());
-                            while ($row1 = mysql_fetch_array($query_size)) :
-                                if ($size == $row1['siz_id']):
-                                    ?>
-                                    <option value="<?= $row1['siz_id'] ?>" selected><?= $row1['siz_name'] ?></option>
-                                <?php else: ?>
-                                    <option value="<?= $row1['siz_id'] ?>"><?= $row1['siz_name'] ?></option>
-                                <?php endif; ?>
-                            <?php endwhile; ?>
-                        </select>
-                    </div> 
-                </div> 
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <label class="col-sm-4">แยก</label>
-                    <div class="col-sm-6" style="color: white">
+                    <div class="col-sm-3" style="color: white">
                         <select name="attribute" class="form-control" required>
                             <?php
                             $arrAttribute = arrayAttribute();
@@ -143,8 +121,35 @@ if (!empty($_GET['id'])) {
                     </div> 
                 </div> 
                 <div class="col-sm-6">
+                    <label class="col-sm-4">เบอร์</label>
+                    <div class="col-sm-3" style="color: white">
+                        <select name="size" class="form-control" required>
+                            <option value="" > -- เลือก --</option>
+                            <?php
+                            $sql_size = "SELECT * FROM `size` ORDER BY siz_name";
+                            $query_size = mysql_query($sql_size) or die(mysql_error());
+                            while ($row1 = mysql_fetch_array($query_size)) :
+                                if ($size == $row1['siz_id']):
+                                    ?>
+                                    <option value="<?= $row1['siz_id'] ?>" selected><?= $row1['siz_name'] ?></option>
+                                <?php else: ?>
+                                    <option value="<?= $row1['siz_id'] ?>"><?= $row1['siz_name'] ?></option>
+                                <?php endif; ?>
+                            <?php endwhile; ?>
+                        </select>
+                    </div> 
+                </div> 
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label class="col-sm-4">จำนวคงเหลือ</label>
+                    <div class="col-sm-4" style="color: white">
+                        <input type="number" name="item_balance_no" class="form-control" value="<?= $no_balance ?>"/>
+                    </div> 
+                </div> 
+                <div class="col-sm-6">
                     <label class="col-sm-4">ความสำคัญ</label>
-                    <div class="col-sm-6" style="color: white">
+                    <div class="col-sm-3" style="color: white">
                         <select name="priority" class="form-control" required>
                             <?php
                             $arrPriority = arrayPriority();
@@ -168,7 +173,7 @@ if (!empty($_GET['id'])) {
             <div class="form-group">
                 <div class="col-sm-6">
                     <label class="col-sm-4">สถานะ</label>
-                    <div class="col-sm-6" style="color: white">
+                    <div class="col-sm-4" style="color: white">
                         <select name="status" class="form-control" required>
                             <?php
                             $arrStatus = arrayStatus();

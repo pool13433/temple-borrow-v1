@@ -143,6 +143,15 @@ function arrayBorrowStatus() {
         '6' => 'ยกเลิก'
     );
 }
+function arrayReason(){
+    return array(        
+        '1' => 'งานแต่งงาน',
+        '2' => 'งานบวช',
+        '3' => 'งานศพ',
+        '4' => 'งานขึ้นบ้านใหม่',        
+        '0' => 'อื่น ๆ ระบุ',
+    );
+}
 
 function convertDate($date, $spile = null, $format = null) {
     $newdate = '';
@@ -160,6 +169,13 @@ function convertDate($date, $spile = null, $format = null) {
         $newdate = date('d' . $a . 'm' . $a . 'Y', strtotime($date));
     }
     return $newdate;
+}
+
+function genarateReport($htmlContent) {
+    $mpdf = new mPDF("UTF-8");
+    $mpdf->SetAutoFont();
+    $mpdf->WriteHTML($html);
+    $mpdf->Output();
 }
 
 ?>

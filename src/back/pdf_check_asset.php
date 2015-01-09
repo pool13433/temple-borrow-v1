@@ -1,101 +1,96 @@
-<?php
-require_once '../../tcpdf/tcpdf.php';
+<?Php
+include_once '../../config/app_connect.php';
+require '../../MPDF57/mpdf.php';
 
-$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
-// set document information
-$pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('TempleAsset');
-$pdf->SetTitle('รายงาน ทรัพย์สิน');
-$pdf->SetSubject('TCPDF Tutorial Learning');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+if (!empty($_GET)):
+    $group_name = "ทั้งหมด";
+    $group = $_GET['group'];
+    $status = $_GET['status'];
+    $sql = "SELECT i.ite_name,i.ite_total_no,i.ite_balance_no";
 
-// set default header data
-$title = 'รายงาน ทรัพย์สิน';
-$pdf->SetHeaderData("", "", $title, "", array(0, 64, 255), array(0, 64, 128));
-$pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+    $sql .= "  ,(CASE ";
+    $sql .= " WHEN ite_priority = 1 THEN 'ปกติ' ";
+    $sql .= " WHEN ite_priority = 1 THEN 'พิเศษ' ";
+    $sql .= " ELSE 'อื่น ๆ' ";
+    $sql .= " END) AS ite_priority";
 
-// set header and footer fonts
-$pdf->setHeaderFont(array('freeserif', '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(array('freeserif', '', PDF_FONT_SIZE_DATA));
+    $sql .= "  ,(CASE ";
+    $sql .= " WHEN ite_status = 1 THEN 'ปกติ' ";
+    $sql .= " WHEN ite_status = 2 THEN 'ยืม' ";
+    $sql .= " WHEN ite_status = 3 THEN 'ชำรุด' ";
+    $sql .= " ELSE ' ไม่ระบุ ' ";
+    $sql .= " END) AS ite_status";
 
-// set default monospaced font
-$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+    $sql .= " ,g.*,t.*,s.*";
+    $sql .= " ,(SELECT SUM(bordet_no) FROM borrow_detail bd,borrow br";
+    $sql .= " WHERE bd.bor_id = br.bor_id";
+    $sql .= " AND bd.ite_id = i.ite_id";
+    //$sql .= " AND br.bor_status = 2";
+    $sql .= " ) as count_borrow";
+    $sql .= " FROM item i";
+    $sql .= " LEFT JOIN `group` g ON g.gro_id = i.gro_id";
+    $sql .= " LEFT JOIN type t ON t.typ_id = i.typ_id";
+    $sql .= " LEFT JOIN size s ON s.siz_id = i.siz_id";
+    if ($group != ''):
+        $sql .= " WHERE i.gro_id = " . $group;
 
-// set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-$pdf->SetFont('freeserif', '', 14, '', true);
-
-$pdf->AddPage();
-// ####################### SQL ###########################
-include '../../config/app_connect.php';
-    $sql = "SELECT * FROM `item` i";
-    $sql .= " JOIN `group` g ON g.gro_id = i.gro_id";
-    $sql .= " JOIN `type` t ON t.typ_id = i.typ_id";
-    $sql .= " JOIN `size` s ON s.siz_id = i.siz_id";
-$query = mysql_query($sql) or die(mysql_error());
-// ####################### END SQL ########################
-
-// Set some content to print
-$html = <<<EOD
-<style type="text/css">
-     table.gridtable {
-	font-family: verdana,arial,sans-serif;
-	font-size:11px;
-	color:#333333;
-	border-width: 1px;
-	border-color: #666666;
-	border-collapse: collapse;
-}
-table.gridtable th {
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #666666;
-	background-color: #dedede;
-}
-table.gridtable td {
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #666666;
-	background-color: #ffffff;
-}
-</style>
-       <table class="gridtable">
-            <thead>
+        // ################### group ###############
+        $sql_group = "SELECT * FROM `group` WHERE gro_id =  " . $group;
+        $query_group = mysql_query($sql_group) or die(mysql_error());
+        $result = mysql_fetch_assoc($query_group);
+        $group_name = $result['gro_name'];
+        // ###################end group ############
+    endif;
+    $sql .= ' ORDER BY ite_name,gro_name,ite_total_no';
+    
+    $query = mysql_query($sql) or die(mysql_error());
+    ob_start();
+    ?>
+    <link rel="stylesheet" href="../../css/report_style.css" type="text/css"/>
+    <?php //echo 'sql : ' . $sql;  ?>
+    <h3 style="text-align: center">รายงานสรุปข้อมูลการตรวจสอบสถานะของสิ่งของ</h3>
+    <h4 style="text-align: center">กลุ่ม <?= $group_name ?></h4>
+    <table>
+        <thead>
+            <tr>
+                <th>ชื่อ</th>
+                <th>กลุ่ม</th>
+                <th>ชนิด</th>
+                <th>ขนาด</th>
+                <th>จำนวนทั้งหมด</th>
+                <th>จำนวนคงเหลือ</th>
+                <th>ความสำคัญ</th>
+                <th>สถานะ</th>
+                <th>จำนวนของถูกยืมไป</th>
+            </tr>
+        </thead>
+        <tbody>            
+            <?php while ($row = mysql_fetch_array($query)) : ?>
                 <tr>
-                    <th style="width: 10%">รหัส</th>
-                    <th>ชื่อ</th>
-                    <th>กลุ่ม</th>
-                    <th>ชนิด</th>
-                    <th>ขนาด</th>
-                    <th>ขนาด</th>
+                    <td><?= $row['ite_name'] ?></td>
+                    <td><?= $row['gro_name'] ?></td>
+                    <td><?= $row['typ_name'] ?></td>
+                    <td><?= $row['siz_name'] ?></td>
+                    <td><?= $row['ite_total_no'] ?></td>
+                    <td><?= $row['ite_balance_no'] ?></td>
+                    <td><?= $row['ite_priority'] ?></td>
+                    <td><?= $row['ite_status'] ?></td>
+                    <td><?= $row['count_borrow'] ?></td>
                 </tr>
-            </thead>
-            <tbody>
-EOD;
-while ($row = mysql_fetch_array($query)) :
-    $html .= <<<EOD
-                <tr>
-                    <td>{$row['ite_id']}</td>
-                    <td>{$row['ite_name']}</td>
-                    <td>{$row['gro_name']}</td>
-                    <td>{$row['typ_name']}</td>
-                    <td>{$row['siz_name']}</td>
-                    <td>{$row['siz_name']}</td>
-                 </tr>
-EOD;
-endwhile;
-$html .= <<<EOD
-            </tbody>
-        </table>
-EOD;
+            <?php endwhile; ?>
+        </tbody>
+    </table>
 
-// Print text using writeHTMLCell()
-$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
-// Close and output PDF document
-$pdf->Output('example_001.pdf', 'I');
+
+
+    <?php
+    $html = ob_get_contents();
+    ob_clean();
+    $mpdf = new mPDF("UTF-8");
+    $mpdf->SetAutoFont();
+    $mpdf->AddPage('L');
+    $mpdf->Write($stylesheet, 1);
+    $mpdf->WriteHTML($html);
+    $mpdf->Output();
+endif;

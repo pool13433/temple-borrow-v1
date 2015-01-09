@@ -1,4 +1,5 @@
 <?php include '../../config/app_connect.php'; ?>
+<?php $type = ""; ?>
 <div class="panel panel-success">
     <div class="panel-heading">        
         <i class="glyphicon glyphicon-tower"></i> ประวัติการยืม
@@ -7,15 +8,18 @@
         <table class="table table-bordered tablePagination">
             <thead>
                 <tr>
-                    <th style="width: 10%">รหัส</th>
+                    <th>รหัส</th>
+                    <th></th>
+                    <th>ชื่อผู้ยืม</th>
                     <th>รหัสบัตร</th>
+                    <th>วันที่ยืม</th>
                     <th>วันมารับของ</th>
                     <th>วันใช้งาน</th>
                     <th>วันคืนของ</th>
                     <th>จำนวนของ / รายการ</th>
                     <th>สถานะการยืม</th>
                     <th>สถานะการอนุมัติ</th>
-                    <th style="width: 25%;">ACTION</th>
+                    <th style="width: 20%;">ACTION</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,12 +31,17 @@
                   $sql .= " DATE_FORMAT(STR_TO_DATE(br.bor_get, '%D %M %Y'), '%Y-%m-%d')";
                   $sql .= " ,br.bor_start,br.bor_end,br.bor_status,br.bor_approve"; */
                 $sql .=" ,ps.*";
-                $sql .= " ,(SELECT count(*) FROM borrow_detail bd WHERE bd.bor_id = br.bor_id) as count_item";
+                $sql .= " ,(SELECT count(*) FROM borrow_detail bd ,item i WHERE bd.ite_id = i.ite_id";
+                $sql .= " AND i.ite_priority = 1"; // 1 = ปกติ
+                $sql .= " AND bd.bor_id = br.bor_id ) as count_normal_item";
+                $sql .= " ,(SELECT count(*) FROM borrow_detail bd ,item i WHERE bd.ite_id = i.ite_id";
+                $sql .= " AND i.ite_priority = 2"; // 2 = พิเศษ
+                $sql .= " AND bd.bor_id = br.bor_id) as count_special_item";
                 $sql .= " FROM `borrow` br";
                 $sql .= " JOIN person ps ON ps.per_id = br.per_id";
                 //$sql .= " WHERE br.bor_status <> 6"; // ไม่เอาที่ยกเลิก ไปแล้ว 6 = ยกเลิกไปแล้ว
                 $sql .= "";
-                $sql .= " ORDER BY bor_id";
+                $sql .= " ORDER BY bor_createdate,bor_id DESC";
 
                 // แสดง sql
                 echo printSql($sql);
@@ -42,6 +51,7 @@
                 ?>
                 <?php while ($row = mysql_fetch_array($query)) : ?>
                     <tr>
+                        <td><?=$row['bor_id']?></td>
                         <td>
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target=".zoom<?= $row['bor_id'] ?>">
                                 <i class="glyphicon glyphicon-zoom-in"></i><?= $row['bor_id'] ?>
@@ -105,14 +115,21 @@
                             <!--modal-->
 
                         </td>
-                        <td><?= $row['per_idcard'] ?></td>
+                        <td><?= $row['per_fname']."  ".$row['per_lname'] ?></td>
+                        <td><?= $row['per_idcard']?></td>
+                        <td><?= convertDate($row['bor_createdate'], '/') ?></td>
                         <td><?= convertDate($row['bor_get'], '/') ?></td>
                         <td><?= convertDate($row['bor_start'], '/') ?></td>
                         <td><?= convertDate($row['bor_end'], '/') ?></td>                        
                         <td>
                             <h4>
                                 <label class="label label-success">
-                                    <?= $row['count_item'] ?> รายการ
+                                    รายการธรรมดา <?= $row['count_normal_item'] ?> รายการ
+                                </label>
+                            </h4>
+                            <h4>
+                                <label class="label label-warning">
+                                    รายการพิเศษ <?= $row['count_special_item'] ?> รายการ
                                 </label>
                             </h4>
                         </td>
@@ -121,8 +138,10 @@
                                 <label class="label label-warning">รอยืม</label>
                             <?php elseif ($row['bor_status'] == 2): ?>
                                 <label class="label label-success">ยืม</label>
+                                <?php $type = 'approve'; ?>
                             <?php elseif ($row['bor_status'] == 3): ?>
                                 <label class="label label-info">คืน</label>
+                                <?php $type = 'return'; ?>
                             <?php elseif ($row['bor_status'] == 4): ?>
                                 <label class="label label-warning">มารับ ของ ล้าช้า</label>
                             <?php elseif ($row['bor_status'] == 5): ?>
@@ -142,9 +161,9 @@
                             <?php if ($row['bor_status'] != 6): ?>
                                 <ul class="list-group">
                                     <?php if ($_SESSION['person']['per_status'] == 1): ?>
-                                        <?php if ($row['bor_status'] == 3): ?>
+                                        <?php if ($row['bor_status'] == 1 || $row['bor_status'] == 3): ?>
                                             <li class="list-group-item">
-                                                <a href="index.php?page=manage_borrow_detail&id=<?= $row['bor_id'] ?>" class="btn btn-success btn-sm">
+                                                <a href="index.php?page=manage_borrow_detail&id=<?= $row['bor_id'] ?>&type=<?= $type ?>" class="btn btn-success btn-sm">
                                                     <i class="glyphicon glyphicon-list-alt"></i>  จัดการ คืนของ
                                                 </a>
                                             </li>
@@ -152,7 +171,7 @@
                                     <?php endif; ?>
                                     <li class="list-group-item">
                                         <button type="button" class="btn btn-primary btn-sm borrow"   data-toggle="modal" data-target=".borrow<?= $row['bor_id'] ?>">
-                                            <i class="glyphicon glyphicon-bell"></i> MANAGE    
+                                            <i class="glyphicon glyphicon-bell"></i> ปรับสถานะ    
                                         </button>
                                     </li>
                                 </ul>
@@ -193,7 +212,7 @@
                                                         </div>                                                
                                                     </div>
                                                 <?php endif; ?>
-                                                <?php if ($_SESSION['person']['per_status'] == 2):  // 2 = head officer   ?> 
+                                                <?php if ($_SESSION['person']['per_status'] == 2 || $_SESSION['person']['per_status'] == 1):  // 2 = head officer   ?> 
                                                     <div class="form-group">
                                                         <div class="col-md-12">
                                                             <label class="col-sm-4">อนุมัติ การยืม</label>
@@ -236,7 +255,7 @@
                                                         <div class="col-md-12">
                                                             <label class="col-sm-4">เหตุผล การ คืนไม่ครบ</label>
                                                             <div class="col-sm-8">
-                                                                <textarea class="form-control" name="bor_result_claim" rows="4"><?= $row['bor_result_claim'] ?></textarea>
+                                                                <textarea class="form-control" name="bor_remark" rows="4"><?= $row['bor_remark'] ?></textarea>
                                                             </div>
                                                         </div>                                                
                                                     </div>
@@ -269,7 +288,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="8"></th>
+                    <th colspan="11"></th>
                     <th style="text-align: center;">
             <h3><label class="label label-info">รวม {  <?= $record ?>  }</label></h3>
             </th>
@@ -280,21 +299,21 @@
 </div>
 
 <script type="text/javascript">
-                                            function saveBorrow(id) {
-                                                if (confirm(' ยืนยัน การปรับเปลี่ยน สถานะ รหัส [ ' + id + ' ] ใช่ หรือ ไม่')) {
-                                                    $.ajax({
-                                                        url: 'db_borrow.php?method=borrow_manage',
-                                                        data: $('#borrow-form' + id).serialize(),
-                                                        type: 'post',
-                                                        success: function(data) {
-                                                            if (data == 1) {
-                                                                window.location.reload();
-                                                            } else {
-                                                                alert(' แก้ไข ไม่สำเร็จ : \n' + data);
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                                return false;
-                                            }
+    function saveBorrow(id) {
+        if (confirm(' ยืนยัน การปรับเปลี่ยน สถานะ รหัส [ ' + id + ' ] ใช่ หรือ ไม่')) {
+            $.ajax({
+                url: 'db_borrow.php?method=borrow_manage',
+                data: $('#borrow-form' + id).serialize(),
+                type: 'post',
+                success: function(data) {
+                    if (data == 1) {
+                        window.location.reload();
+                    } else {
+                        alert(' แก้ไข ไม่สำเร็จ : \n' + data);
+                    }
+                }
+            });
+        }
+        return false;
+    }
 </script>

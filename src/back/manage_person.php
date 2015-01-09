@@ -1,7 +1,7 @@
 <?php include '../../config/app_connect.php'; ?>
 <div class="panel panel-success">
     <div class="panel-heading">        
-        <?php echo breadCrumbs('manage_person', 'จัดการ Person', 'form_person', 'เพิ่ม Person') ?>
+        <?php echo breadCrumbs('manage_person', 'จัดการ ผู้ใช้งาน', 'form_person', 'เพิ่ม ผู้ใช้งาน') ?>
     </div>
     <div class="panel-body">
         <table class="table table-bordered tablePagination">

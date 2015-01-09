@@ -13,10 +13,10 @@ if (!empty($_GET['id'])) {
 }
 ?>
 
-<form action="db_type.php?method=create" method="post" class="form-horizontal">
+<form action="index.php?page=db_type&method=create" method="post" class="form-horizontal">
     <div class="panel panel-success">
         <div class="panel-heading">        
-            <?php echo breadCrumbs('manage_type', 'จัดการ type', 'form_type', 'เพิ่ม type') ?>
+            <?php echo breadCrumbs('manage_type', 'จัดการ ประเภทสิ่งของวัด', 'form_type', 'เพิ่ม ประเภทสิ่งของวัด') ?>
         </div>
         <div class="panel-body">
             <div class="form-group">

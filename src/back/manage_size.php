@@ -1,7 +1,7 @@
 <?php include '../../config/app_connect.php'; ?>
 <div class="panel panel-success">
     <div class="panel-heading">        
-        <?php echo breadCrumbs('manage_szie', 'จัดการ size', 'form_size', 'เพิ่ม sze') ?>
+        <?php echo breadCrumbs('manage_szie', 'จัดการ ขนาดสิ่งของวัด', 'form_size', 'เพิ่ม ขนาดสิ่งของวัด') ?>
     </div>
     <div class="panel-body">
         <table class="table table-bordered tablePagination">
@@ -10,7 +10,7 @@
                     <th style="width: 10%">รหัส</th>
                     <th>ชื่อ</th>
                     <th>กลุ่ม</th>
-                    <th style="width: 25%;text-align: center;">ACTION</th>
+                    <th style="width: 15%;text-align: center;">ACTION</th>
                 </tr>
             </thead>
             <tbody>
