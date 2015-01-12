@@ -3,6 +3,8 @@
 @session_start();
 ?>
 <?php include '../../config/app_connect.php'; ?>
+<?php ?>
+
 <div class="panel panel-success">
     <div class="panel-heading">        
         <i class="glyphicon glyphicon-shopping-cart"></i> รายการของที่จะยืม
@@ -19,7 +21,7 @@
                 <button type="button" class="btn btn-danger" onclick="return cancleItemAll()">
                     <i class="glyphicon glyphicon-trash"></i> ยกเลิกทั้งหมด
                 </button>
-                <a href="index.php?page=main_borrow&id=<?= $_GET['id'] ?>" class="btn btn-primary" id="go">
+                <a href="index.php?page=main_borrow" class="btn btn-primary" id="go">
                     <i class="glyphicon glyphicon-arrow-right"></i> ต่อไป
                 </a>
             </div>
@@ -43,11 +45,15 @@
                 $sql .= " WHERE 1=1 ";
 
                 $sql .= " AND br.per_id = " . $_SESSION['person']['per_id'];
-                if (!empty($_GET['id'])): // กรณีแก้ไข หลังจาก คอนเฟิร์มไปแล้ว
+                if (!empty($_GET['id']) || !empty($_SESSION['borrow_confirm_id'])): // กรณีแก้ไข หลังจาก คอนเฟิร์มไปแล้ว
                     $bor_id = $_GET['id'];
+                    if (!empty($_SESSION['borrow_confirm_id'])) {
+                        $bor_id = $_SESSION['borrow_confirm_id'];
+                    }
                     $sql .= " AND bd.bor_id = " . $bor_id;
                     $sql .= " AND br.bor_status > 0";
                     $_SESSION['borrow_confirm_id'] = $bor_id;
+                    echo '<input type="text" name="bor_id" id="bor_id" value="' . $bor_id . '"/>';
                 else: // กำลัง เพิ่มสินค้าเข้าตะกร้า
                     $sql .= " AND br.bor_status = 0";
                     $sql .= " AND date(bd.bordet_createdate) = date(NOW())";
@@ -62,7 +68,7 @@
                 ?>
                 <?php while ($row = mysql_fetch_array($query)) : ?>
                     <tr>
-                        <td><?= $no ?></td>
+                        <td><?= $no?></td>
                         <td><?= $row['ite_name'] ?></td>
                         <td><?= $row['bordet_no'] ?></td>
                         <td style="text-align: center;">
@@ -73,9 +79,7 @@
                             </div>
                         </td>
                     </tr>
-                    <?php $no++;
-                endwhile;
-                ?>
+                <?php $no++; endwhile; ?>
             </tbody>
             <tfoot>
                 <tr>
@@ -92,6 +96,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var count = $('#total').val();
+        var bor_id = $('#bor_id').val();
+        if (bor_id == 'undefined') {
+            bor_id = '';
+        }
         if (parseInt(count) > 0) {
             $('#go').attr('href', 'index.php?page=main_borrow&id=' + bor_id);
         } else {

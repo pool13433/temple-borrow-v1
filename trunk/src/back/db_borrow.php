@@ -120,10 +120,6 @@ switch ($_GET['method']) {
 
         echo mysql_query($sql) or die(mysql_error());
         break;
-    case 'delete':
-        $id = $_POST['id'];
-        echo mysql_query("DELETE FROM borrow_detail WHERE bordet_id = $id") or die(mysql_error());
-        break;
     default:
         echo ' no method';
         break;

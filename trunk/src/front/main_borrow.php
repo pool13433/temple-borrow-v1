@@ -9,8 +9,7 @@ $bor_end = "";
 $bor_get = "";
 $bor_detail = "";
 $bor_reason = "";
-if (!empty($_GET['id'])) {
-    $bor_id = $_GET['id'];
+if (!empty($_SESSION['borrow_confirm_id'])) {
     $sql = "SELECT bor_id";
     $sql .=" ,DATE_FORMAT(bor_get,'%Y/%m/%d') as bor_get";
     $sql.=" ,DATE_FORMAT(bor_start,'%Y/%m/%d') as bor_start";
@@ -18,7 +17,7 @@ if (!empty($_GET['id'])) {
     $sql.=" ,DATE_FORMAT(bor_createdate,'%Y/%m/%d') as bor_createdate";
     $sql.=" ,bor_detail";
     $sql.=" ,bor_reason";
-    $sql .=" FROM borrow WHERE bor_id = $bor_id";
+    $sql .=" FROM borrow WHERE bor_id = " . $_SESSION['borrow_confirm_id'];
 
     echo printSql($sql);
 
@@ -44,11 +43,9 @@ if (!empty($_GET['id'])) {
         </div>
         <div class="panel-body" style="text-align: left;">
             <div class="row-offcanvas-left">
-                <?php if (!empty($_GET['id'])): ?>
-                    <a href="index.php?page=main_cart&id=<?= $bor_id ?>" class="btn btn-primary">
-                        <i class="glyphicon glyphicon-arrow-left"></i> กลับ
-                    </a>
-                <?php endif; ?>
+                <a href="index.php?page=main_cart&id=<?= $bor_id ?>" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-arrow-left"></i> กลับ
+                </a>
             </div>
         </div>
         <div class="panel-body">
@@ -122,7 +119,7 @@ if (!empty($_GET['id'])) {
                 <div class="col-md-7">
                     <label class="col-sm-3">อื่น ๆ โปรดระบุ</label>
                     <div class="col-sm-8">
-                        <textarea class="form-control" name="bor_detail"  rows="3" required="true" disabled="true"><?= $bor_detail ?></textarea>
+                        <textarea class="form-control" name="bor_detail"  rows="3" required="true" disabled="true"><?=$bor_detail?></textarea>
                     </div>
                 </div>
             </div>

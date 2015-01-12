@@ -24,7 +24,7 @@
                             <th style="width: 10px;">รหัส สิ่งของ</th>
                             <th style="width: ">ชื่อ</th>
                             <th style="width: 10px;">ความสำคัญ</th>
-                            <th style="width: 15px;">จำนวน ที่ยืม</th>                            
+                            <th style="width: 15px;">จำนวน ที่ยืม</th>
                         </tr>                                                        
                     </thead>
                     <tbody>
@@ -40,7 +40,8 @@
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <?= $row_zoom['bordet_no'] ?>                                    
+                                    <?= $row_zoom['bordet_no'] ?>
+                                    <button class="btn btn-primary" onclick="edit_item(this,<?= $row_zoom['bordet_id'] ?>)"><i class="glyphicon glyphicon-pencil"></i></button>
                                 </td>
                             </tr>
                         <?php endwhile; ?>
@@ -57,7 +58,6 @@
 </div>
 <!--modal-->
 <script type="text/javascript">
-
     var ITEM_ID;
     function edit_item(element, id) {
         ITEM_ID = id;
@@ -101,7 +101,6 @@
         td_edit.append('<button class="btn btn-primary" onclick="edit_item(this,' + ITEM_ID + ')"><i class="glyphicon glyphicon-pencil"></i></button>');
         console.log('item_text : ' + item_text);
     }
-
 </script>
 <?php
 // https://github.com/micc83/editTable

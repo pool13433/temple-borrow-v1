@@ -27,6 +27,7 @@
                 $sql .= "";
                 $sql .= " AND br.per_id = " . $_SESSION['person']['per_id'];
                 $sql .= " ORDER BY br.bor_id desc"; // date(br.bor_createdate),
+
                 // แสดง sql
                 echo printSql($sql);
 
@@ -37,17 +38,12 @@
                     <tr>         
                         <td><?= $row['bor_id'] ?></td>
                         <td>
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target=".zoom<?= $row['bor_id'] ?>">
-                                        <i class="glyphicon glyphicon-zoom-in"></i>
-                                    </button>
-                                </li>
-                                <li class="list-group-item">
-                                    <a href="index.php?page=main_cart&id=<?= $row['bor_id'] ?>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> แก้ไขของยืม</a>
-                                </li>
-                            </ul>
-                            <?php include './view_item.php'; ?>
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target=".zoom<?= $row['bor_id'] ?>">
+                                <i class="glyphicon glyphicon-zoom-in"></i>
+                            </button>
+
+                            <?php include './view_item.php';?>
+
                         </td>                        
                         <td><?= $row['bor_get'] ?></td>
                         <td><?= $row['bor_start'] ?></td>
@@ -86,8 +82,8 @@
                                 <ul class="list-group">
                                     <?php if ($row['bor_status'] == 1): ?>
                                         <li class="list-group-item">
-                                            <a href="index.php?page=main_borrow&id=<?= $row['bor_id'] ?>" class="btn btn-info btn-sm">
-                                                <i class="glyphicon glyphicon-pencil"></i> แก้ไขใบยืม    
+                                            <a href="index.php?page=main_cart&id=<?= $row['bor_id'] ?>" class="btn btn-info btn-sm">
+                                                <i class="glyphicon glyphicon-trash"></i> แก้ไข    
                                             </a>  
                                         </li>
                                     <?php endif; ?>
