@@ -72,9 +72,10 @@
                             <?php endif; ?>
                         </td>
                         <td>
+                            (<?=$row['bor_status']?>)
                             <?php if ($row['bor_approve'] == 0): ?>
                                 <label class="label label-warning">รอ อนุมัติ</label>
-                            <?php elseif ($row['bor_status'] == 1): ?>
+                                <?php elseif ($row['bor_status'] == 1): ?>
                                 <label class="label label-success">อนุมัติ เรียบร้อยแล้ว</label>
                             <?php else: ?>    
                                 <label class="label label-default">อื่น ๆ</label>   
