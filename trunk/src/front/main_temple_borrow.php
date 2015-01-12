@@ -72,7 +72,6 @@
                             <?php endif; ?>
                         </td>
                         <td>
-                            (<?= $row['bor_status'] ?>)
                             <?php if ($row['bor_approve'] == 0): ?>
                                 <label class="label label-warning">รอ อนุมัติ</label>
                             <?php elseif ($row['bor_approve'] == 1): ?>
