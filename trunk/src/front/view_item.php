@@ -41,7 +41,7 @@
                                 </td>
                                 <td>
                                     <?= $row_zoom['bordet_no'] ?>
-                                    <button class="btn btn-primary" onclick="edit_item(this,<?= $row_zoom['bordet_id'] ?>)"><i class="glyphicon glyphicon-pencil"></i></button>
+                                    <!--<button class="btn btn-primary" onclick="edit_item(this,<?= $row_zoom['bordet_id'] ?>)"><i class="glyphicon glyphicon-pencil"></i></button>-->
                                 </td>
                             </tr>
                         <?php endwhile; ?>
