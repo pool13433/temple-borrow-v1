@@ -1,6 +1,8 @@
 $(function() {
 // date picker one input (.date)
-    $('.date').datepicker({});
+    $('.date').datepicker({
+        
+    });
     // date picker between (.datefrom,.dateto)
     datePickerBeTween();
 
