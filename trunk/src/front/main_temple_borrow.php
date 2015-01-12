@@ -45,9 +45,9 @@
                             <?php include './view_item.php';?>
 
                         </td>                        
-                        <td><?= $row['bor_get'] ?></td>
-                        <td><?= $row['bor_start'] ?></td>
-                        <td><?= $row['bor_end'] ?></td>                        
+                        <td><?= change_dateYMD_TO_DMY($row['bor_get']) ?></td>
+                        <td><?= change_dateYMD_TO_DMY($row['bor_start']) ?></td>
+                        <td><?= change_dateYMD_TO_DMY($row['bor_end']) ?></td>                        
                         <td>
                             <h4>
                                 <label class="label label-success">
