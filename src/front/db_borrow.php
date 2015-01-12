@@ -14,9 +14,9 @@ switch ($_GET['method']) {
         if (!empty($_SESSION['borrow_confirm_id'])) {
             $borrow_id = $_SESSION['borrow_confirm_id'];
         }
-        $bor_get = $_POST['bor_get'];
-        $bor_start = $_POST['bor_start'];
-        $bor_end = $_POST['bor_end'];
+        $bor_get = change_dateDMY_TO_YMD($_POST['bor_get']);
+        $bor_start = change_dateDMY_TO_YMD($_POST['bor_start']);
+        $bor_end = change_dateDMY_TO_YMD($_POST['bor_end']);
         $bor_reason = $_POST['bor_reason'];
 
 

@@ -143,12 +143,13 @@ function arrayBorrowStatus() {
         '6' => 'ยกเลิก'
     );
 }
-function arrayReason(){
-    return array(        
+
+function arrayReason() {
+    return array(
         '1' => 'งานแต่งงาน',
         '2' => 'งานบวช',
         '3' => 'งานศพ',
-        '4' => 'งานขึ้นบ้านใหม่',        
+        '4' => 'งานขึ้นบ้านใหม่',
         '0' => 'อื่น ๆ ระบุ',
     );
 }
@@ -176,6 +177,20 @@ function genarateReport($htmlContent) {
     $mpdf->SetAutoFont();
     $mpdf->WriteHTML($html);
     $mpdf->Output();
+}
+
+function change_dateDMY_TO_YMD($beforDate) {
+    $array = explode("/", $beforDate);
+    return $array[2] . "-" . $array[1] . "-" . $array[0];
+}
+
+function change_dateYMD_TO_DMY($beforDate) {
+    if (!empty($beforDate)) {
+        $array = explode("-", $beforDate);
+        return $array[2] . "/" . $array[1] . "/" . $array[0];
+    } else {
+        return "";
+    }
 }
 
 ?>

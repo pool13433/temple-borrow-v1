@@ -33,7 +33,7 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
     $bor_reason = $result['bor_reason'];
 } else {
     $bor_id = $_SESSION['borrow_id'];
-    $bor_createdate = date('Y-m-d');
+    $bor_createdate = date('d-m-Y');
 }
 ?>
 <form action="db_borrow.php?method=create" name="borrow-form" method="post" class="form-horizontal">
@@ -67,8 +67,8 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
                 <div class="col-md-7">
                     <label class="col-sm-3">วันที่ มารับของ</label>
                     <div class="col-sm-4">
-                        <div data-date-format="yyyy/mm/dd" data-date="12-02-2012" class="input-group date">                        
-                            <input type="text" size="16" class="form-control" name="bor_get" required="true" value="<?= $bor_get ?>">
+                        <div data-date-format="dd/mm/yyyy" data-date="12-02-2012" class="input-group date">                        
+                            <input type="text" size="16" class="form-control datepicker" name="bor_get" required="true" value="<?= $bor_get ?>">
                             <div class="input-group-addon ">
                                 <i class="glyphicon glyphicon-calendar add-on"></i>
                             </div>
@@ -80,7 +80,7 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
                 <div class="col-md-5">
                     <label class="col-sm-6">วันที่ เริ่มใช้งาน</label>
                     <div class="col-sm-6">
-                        <div data-date-format="yyyy/mm/dd" data-date="12-02-2012" class="input-group date">                        
+                        <div data-date-format="dd/mm/yyyy" data-date="12-02-2012" class="input-group date">                        
                             <input type="text" size="16" class="form-control" name="bor_start" required="true" value="<?= $bor_start ?>">
                             <div class="input-group-addon ">
                                 <i class="glyphicon glyphicon-calendar add-on"></i>
@@ -91,7 +91,7 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
                 <div class="col-md-7">
                     <label class="col-sm-3">วันที่ นำของมาคืน</label>
                     <div class="col-sm-4">
-                        <div data-date-format="yyyy/mm/dd" data-date="12-02-2012" class="input-group date">                        
+                        <div data-date-format="dd/mm/yyyy" data-date="12-02-2012" class="input-group date">                        
                             <input type="text" size="16" class="form-control" name="bor_end" required="true" value="<?= $bor_end ?>">
                             <div class="input-group-addon ">
                                 <i class="glyphicon glyphicon-calendar add-on"></i>
@@ -136,6 +136,12 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
 </form>
 <script type="text/javascript">
     $(function() {
+        //############# datepicker #########
+        /*$('.datepicker').datepicker({
+            format : 'mm/dd/yyyy',
+        });*/
+        //############# datepicker #########      
+        
         var reason_value = $('select[name=bor_reason]').val();
         changReason(reason_value);
         $('select[name=bor_reason]').on('change', function() {
