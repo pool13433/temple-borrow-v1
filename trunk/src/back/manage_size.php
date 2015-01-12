@@ -1,7 +1,7 @@
 <?php include '../../config/app_connect.php'; ?>
 <div class="panel panel-success">
     <div class="panel-heading">        
-        <?php echo breadCrumbs('manage_szie', 'จัดการ ขนาดสิ่งของวัด', 'form_size', 'เพิ่ม ขนาดสิ่งของวัด') ?>
+        <?php echo breadCrumbs('manage_size', 'จัดการ ขนาดสิ่งของวัด', 'form_size', 'เพิ่ม ขนาดสิ่งของวัด') ?>
     </div>
     <div class="panel-body">
         <table class="table table-bordered tablePagination">

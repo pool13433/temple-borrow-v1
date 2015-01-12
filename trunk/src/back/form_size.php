@@ -21,7 +21,7 @@ if (!empty($_GET['id'])) {
 <form action="index.php?page=db_size&method=create" method="post" class="form-horizontal">
     <div class="panel panel-success">
         <div class="panel-heading">        
-            <?php echo breadCrumbs('manage_szie', 'จัดการ ขนาดสิ่งของวัด', 'form_size', 'เพิ่ม ขนาดสิ่งของวัด') ?>
+            <?php echo breadCrumbs('manage_size', 'จัดการ ขนาดสิ่งของวัด', 'form_size', 'เพิ่ม ขนาดสิ่งของวัด') ?>
         </div>
         <div class="panel-body">
             <div class="form-group">
