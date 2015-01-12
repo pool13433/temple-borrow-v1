@@ -27,7 +27,6 @@
                 $sql .= "";
                 $sql .= " AND br.per_id = " . $_SESSION['person']['per_id'];
                 $sql .= " ORDER BY br.bor_id desc"; // date(br.bor_createdate),
-
                 // แสดง sql
                 echo printSql($sql);
 
@@ -42,7 +41,7 @@
                                 <i class="glyphicon glyphicon-zoom-in"></i>
                             </button>
 
-                            <?php include './view_item.php';?>
+                            <?php include './view_item.php'; ?>
 
                         </td>                        
                         <td><?= change_dateYMD_TO_DMY($row['bor_get']) ?></td>
@@ -59,7 +58,7 @@
                             <?php if ($row['bor_status'] == 1): ?>
                                 <label class="label label-warning">รอ รับของ</label>
                             <?php elseif ($row['bor_status'] == 2): ?>
-                                <label class="label label-succes">ยืม</label>
+                                <label class="label label-success">ยืม</label>
                             <?php elseif ($row['bor_status'] == 3): ?>
                                 <label class="label label-info">คืน เรียบร้อยแล้ว</label>
                             <?php elseif ($row['bor_status'] == 4): ?>
@@ -68,13 +67,17 @@
                                 <label class="label label-danger">ไม่มารับ ของ</label>
                             <?php elseif ($row['bor_status'] == 6): ?>
                                 <label class="label label-default">ยกเลิก การจอง เรียบร้อย</label>
+                            <?php else: ?>    
+                                <label class="label label-default">อื่น ๆ</label>
                             <?php endif; ?>
                         </td>
                         <td>
                             <?php if ($row['bor_approve'] == 0): ?>
                                 <label class="label label-warning">รอ อนุมัติ</label>
                             <?php elseif ($row['bor_status'] == 1): ?>
-                                <label class="label label-succes">อนุมัติ เรียบร้อยแล้ว</label>
+                                <label class="label label-success">อนุมัติ เรียบร้อยแล้ว</label>
+                            <?php else: ?>    
+                                <label class="label label-default">อื่น ๆ</label>   
                             <?php endif; ?>
                         </td>
                         <td style="text-align: center;">
@@ -107,7 +110,9 @@
                 <tr>
                     <th colspan="8"></th>
                     <th style="text-align: center;">
-            <h3><label class="label label-info">รวม {  <?= $record ?>  }</label></h3>
+            <h3>
+                <label class="label label-info">รวม {  <?= $record ?>  }</label>
+            </h3>
             </th>
             </tr>
             </tfoot>
