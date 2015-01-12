@@ -33,7 +33,7 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
     $bor_reason = $result['bor_reason'];
 } else {
     $bor_id = $_SESSION['borrow_id'];
-    $bor_createdate = date('d-m-Y');
+    $bor_createdate = date('d/m/Y');
 }
 ?>
 <form action="db_borrow.php?method=create" name="borrow-form" method="post" class="form-horizontal">
