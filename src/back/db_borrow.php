@@ -120,6 +120,7 @@ switch ($_GET['method']) {
 
         echo mysql_query($sql) or die(mysql_error());
         break;
+   
     default:
         echo ' no method';
         break;

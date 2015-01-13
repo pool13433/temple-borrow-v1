@@ -28,11 +28,16 @@
         <script type="text/javascript" src="../../libs/validationengine/js/jquery.validationEngine.js"></script>
         <script type="text/javascript" src="../../libs/validationengine/js/languages/jquery.validationEngine-en.js"></script>
         <!-- validate engine-->
-        
+
+        <!-- select2 -->
+        <link rel="stylesheet" type="text/css" href="../../libs/select2-3.5.0/select2.css"/>
+        <script type="text/javascript" src="../../libs/select2-3.5.0/select2.min.js"></script>
+        <!-- select2 -->
+
         <script type="text/javascript" src="../../js/borrow_script.js"></script>
     </head>   
     <body>
-        <?php include './menu_top.php';?>
+        <?php include './menu_top.php'; ?>
         <div class="container-fluid" style="margin-top: 50px;">
             <div class="panel panel-info">
                 <div class="panel-heading">
