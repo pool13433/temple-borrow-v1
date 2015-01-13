@@ -13,7 +13,7 @@ if (!empty($_GET['id'])) {
 }
 ?>
 
-<form action="index.php?page=db_type&method=create" method="post" class="form-horizontal">
+<form action="index.php?page=db_type&method=create" method="post" id="frm-type" class="form-horizontal">
     <div class="panel panel-success">
         <div class="panel-heading">        
             <?php echo breadCrumbs('manage_type', 'จัดการ ประเภทสิ่งของวัด', 'form_type', 'เพิ่ม ประเภทสิ่งของวัด') ?>
@@ -24,13 +24,15 @@ if (!empty($_GET['id'])) {
                     <label class="col-sm-4">ชื่อ</label>
                     <div class="col-sm-6" style="color: white">
                         <input type="hidden" class="form-control" name="id" value="<?= $id ?>"/>
-                        <input type="text" class="form-control" name="name" value="<?= $name ?>" required/>
+                        <input type="text" class="form-control" name="name" value="<?= $name ?>" 
+                               data-validation-engine="validate[required]"
+                               data-errormessage-value-missing="กรุณากรอก ชื่อชนิดสิ่งของ"/>
                     </div> 
                 </div>   
             </div>
         </div>
         <div class="panel-footer" style="text-align: center;">
-            <button type="submit" class="btn btn-primary" onclick="return confirm('บันทึก')">
+            <button type="submit" class="btn btn-primary">
                 <i class="glyphicon glyphicon-ok-sign"></i> บันทึก
             </button>
             <a href="index.php?page=manage_type" class="btn btn-warning">
@@ -39,4 +41,18 @@ if (!empty($_GET['id'])) {
         </div>
     </div>
 </form>
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        var valid = $('#frm-type').validationEngine('attach', {
+            promptPosition: "centerRight",
+            scroll: false,
+            onValidationComplete: function(form, status) {
+                return status;
+            }
+        });
+        valid.css({
+            'box-shadow': '2px 2px 2px 2px #888888',
+            'padding': '20px',
+        });
+    });
+</script>

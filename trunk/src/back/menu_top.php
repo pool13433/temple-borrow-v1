@@ -51,6 +51,8 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="index.php?page=report_daymonthyear">รายงานสรุปข้อมูลการยืมคืนประจำวัน /เดือน/ ปี</a></li>                     
                         <li><a href="index.php?page=report_check_asset">รายงานสรุปข้อมูลการตรวจสอบสิ่งของที่สูญหาย</a></li>
+                        <li><a href="index.php?page=report_sumorder_byperson">รายงานสรุปใบยืมของวัดตามผู้ใช้งาน</a></li>
+                        <li><a href="index.php?page=report_balance_product">รายงานสรุปสิ่งของวัดคงเหลือ</a></li>
                     </ul>
                 </li>
             </ul>
