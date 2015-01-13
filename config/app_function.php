@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 define('ERROR', 'danger');
 define('INFORMATION', 'success');
@@ -49,8 +49,8 @@ function goLogin() {
 }
 
 function printSql($sql) {
-    return "<pre> sql : " . $sql . "</pre>";
-//return '';
+    //return "<pre> sql : " . $sql . "</pre>";
+	return '';
 }
 
 function arrayOperation() {
