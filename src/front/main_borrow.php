@@ -36,7 +36,7 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
     $bor_createdate = date('d/m/Y');
 }
 ?>
-<form action="db_borrow.php?method=create" name="borrow-form" method="post" class="form-horizontal">
+<form action="db_borrow.php?method=create" name="borrow-form" method="post" id="frm-borrow" class="form-horizontal">
     <div class="panel panel-success">
         <div class="panel-heading">        
             <i class="glyphicon glyphicon-shopping-cart"></i> กรอกข้อมูลการ ยืม
@@ -68,7 +68,9 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
                     <label class="col-sm-3">วันที่ มารับของ</label>
                     <div class="col-sm-4">
                         <div data-date-format="dd/mm/yyyy" data-date="12-02-2012" class="input-group date">                        
-                            <input type="text" size="16" class="form-control datepicker" name="bor_get" required="true" value="<?= $bor_get ?>">
+                            <input type="text" size="16" class="form-control datepicker" name="bor_get"  value="<?= $bor_get ?>"
+                                   data-validation-engine="validate[required]"
+                                   data-errormessage-value-missing="กรุณากรอก วันที่ มารับของ"/>
                             <div class="input-group-addon ">
                                 <i class="glyphicon glyphicon-calendar add-on"></i>
                             </div>
@@ -81,7 +83,9 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
                     <label class="col-sm-6">วันที่ เริ่มใช้งาน</label>
                     <div class="col-sm-6">
                         <div data-date-format="dd/mm/yyyy" data-date="12-02-2012" class="input-group date">                        
-                            <input type="text" size="16" class="form-control" name="bor_start" required="true" value="<?= $bor_start ?>">
+                            <input type="text" size="16" class="form-control" name="bor_start"  value="<?= $bor_start ?>"
+                                   data-validation-engine="validate[required]"
+                                   data-errormessage-value-missing="กรุณากรอก วันที่ เริ่มใช้งาน"/>
                             <div class="input-group-addon ">
                                 <i class="glyphicon glyphicon-calendar add-on"></i>
                             </div>
@@ -92,7 +96,9 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
                     <label class="col-sm-3">วันที่ นำของมาคืน</label>
                     <div class="col-sm-4">
                         <div data-date-format="dd/mm/yyyy" data-date="12-02-2012" class="input-group date">                        
-                            <input type="text" size="16" class="form-control" name="bor_end" required="true" value="<?= $bor_end ?>">
+                            <input type="text" size="16" class="form-control" name="bor_end"  value="<?= $bor_end ?>"
+                                   data-validation-engine="validate[required]"
+                                   data-errormessage-value-missing="กรุณากรอก วันที่ นำของมาคืน"/>
                             <div class="input-group-addon ">
                                 <i class="glyphicon glyphicon-calendar add-on"></i>
                             </div>
@@ -119,13 +125,13 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
                 <div class="col-md-7">
                     <label class="col-sm-3">อื่น ๆ โปรดระบุ</label>
                     <div class="col-sm-8">
-                        <textarea class="form-control" name="bor_detail"  rows="3" required="true" disabled="true"><?=$bor_detail?></textarea>
+                        <textarea class="form-control" name="bor_detail"  rows="3"  disabled="true"><?= $bor_detail ?></textarea>
                     </div>
                 </div>
             </div>
         </div>
         <div class="panel-footer" style="text-align: center;">
-            <button type="submit" class="btn btn-primary" onclick=" return confirm(' ยืนยันการยืม ของวัด')">
+            <button type="submit" class="btn btn-primary">
                 <i class="glyphicon glyphicon-ok-circle"></i> OK
             </button>
             <button type="button" class="btn btn-warning">
@@ -135,13 +141,33 @@ if (!empty($_SESSION['borrow_confirm_id'])) {
     </div>
 </form>
 <script type="text/javascript">
-    $(function() {
+    $(document).ready(function() {
+        // ############## validate ##########
+        var valid = $('#frm-borrow').validationEngine('attach', {
+            promptPosition: "centerRight",
+            scroll: false,
+            onValidationComplete: function(form, status) {
+                if (status) {
+                    if (confirm(' ยืนยันการยืม ของวัด')) {
+                        return status;
+                    }
+                    return false;
+                }
+                return false;
+            }
+        });
+        valid.css({
+            'box-shadow': '2px 2px 2px 2px #888888',
+            'padding': '20px',
+        });
+        // ############## validate ##########
+
         //############# datepicker #########
         /*$('.datepicker').datepicker({
-            format : 'mm/dd/yyyy',
-        });*/
+         format : 'mm/dd/yyyy',
+         });*/
         //############# datepicker #########      
-        
+
         var reason_value = $('select[name=bor_reason]').val();
         changReason(reason_value);
         $('select[name=bor_reason]').on('change', function() {

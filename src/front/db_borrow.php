@@ -8,7 +8,7 @@ include '../../config/app_function.php';
 switch ($_GET['method']) {
     case 'create':
 
-        $msg = 'INSERT Complete';
+        $msg = 'เพิ่มข้อมูลเข้าระบบ สำเร็จ';
 
         $borrow_id = $_SESSION['borrow_id'];
         if (!empty($_SESSION['borrow_confirm_id'])) {

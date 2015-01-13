@@ -6,23 +6,29 @@
         <?php
         include '../../config/app_function.php';
         ?>
-        <link href="../../bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet"/>
-        <link href="../../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="../../libs/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet"/>
+        <link href="../../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
         <!--  date picker-->        
-        <link href="../../datepicker/css/datepicker.css" rel="stylesheet"/>        
+        <link href="../../libs/datepicker/css/datepicker.css" rel="stylesheet"/>        
 
-        <link href="../../datatables/dataTables.css" rel="stylesheet"/> 
+        <link href="../../libs/datatables/dataTables.css" rel="stylesheet"/> 
 
         <link href="../../css/borrow_style.css" rel="stylesheet"/>
 
         <script type="text/javascript" src="../../js/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="../../bootstrap/dist/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="../../datepicker/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="../../libs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../../libs/datepicker/js/bootstrap-datepicker.js"></script>
 
-        <script type="text/javascript" src="../../datatables/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="../../datatables/jquery-DT-pagination.js"></script>
+        <script type="text/javascript" src="../../libs/datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="../../libs/datatables/jquery-DT-pagination.js"></script>
 
+        <!-- validate engine-->
+        <link rel="stylesheet" href="../../libs/validationengine/css/validationEngine.jquery.css"/>
+        <script type="text/javascript" src="../../libs/validationengine/js/jquery.validationEngine.js"></script>
+        <script type="text/javascript" src="../../libs/validationengine/js/languages/jquery.validationEngine-en.js"></script>
+        <!-- validate engine-->
+        
         <script type="text/javascript" src="../../js/borrow_script.js"></script>
     </head>   
     <body>

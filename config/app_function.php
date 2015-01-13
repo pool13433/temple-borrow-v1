@@ -1,7 +1,7 @@
 <?php
 
-define('ERROR', 'red');
-define('INFORMATION', 'green');
+define('ERROR', 'danger');
+define('INFORMATION', 'success');
 
 function alert_message($color = null, $msg = null) {
     echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
@@ -32,8 +32,8 @@ function breadCrumbs($urlMain, $nameMain, $urlForm = null, $nameForm = null) {
 
 function returnMessage($color, $msg) {
     echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
-    $message = "<div style='background-color: yellowgreen;color: " . $color . ";padding: 20px;font-size: large;color: white;'>";
-    $message .= $msg . "</div>";
+    //$message = "<div style='background-color: yellowgreen;color: " . $color . ";padding: 20px;font-size: large;color: white;'>";
+    $message = '<div class="alert alert-' . $color . '" role="alert">' . $msg . '</div>';    
     return $message;
 }
 
@@ -51,6 +51,14 @@ function goLogin() {
 function printSql($sql) {
     return "<pre> sql : " . $sql . "</pre>";
 //return '';
+}
+
+function arrayOperation() {
+    return array(
+        '>' => 'มากกว่า',
+        '<' => 'น้อยกว่า',
+        '=' => 'เท่ากับ',
+    );
 }
 
 function randomString($length = 10) {

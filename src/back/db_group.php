@@ -17,7 +17,7 @@ switch ($_GET['method']) {
 
             if (empty($id)) { // insert
                 // กรณี เพิ่ม
-                $msg = 'INSERT Complete';
+                $msg = 'เพิ่มข้อมูลเข้าระบบ สำเร็จ';
                 // สร้าง string sql
                 $sql .= " INSERT INTO `group` (gro_name,gro_createdate)";
                 $sql .= " VALUES (";
@@ -25,7 +25,7 @@ switch ($_GET['method']) {
                 $sql .= " )";
             } else { // update
                 // กรณี เพิ่ม
-                $msg = 'UPDATE Complete';
+                $msg = 'แก้ไขข้อมูล สำเร็จ';
                 // สร้าง string sql
                 $sql .= " UPDATE `group` SET ";
                 $sql .= "  gro_name = '" . $name . "'";
