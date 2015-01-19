@@ -195,7 +195,7 @@
                                                 <?php if ($_SESSION['person']['per_status'] == 1): // 1 = officer ?>
                                                     <div class="form-group">
                                                         <div class="col-md-12">
-                                                            <label class="col-sm-4">ปรับเปลี่ยนสถานะ การยืม</label>
+                                                            <label class="col-sm-4">ปรับเปลี่ยนสถานะ การยืม/คืน</label>
                                                             <div class="col-sm-4">
                                                                 <?php $arrayBorrowStatus = arrayBorrowStatus(); ?>
                                                                 <select class="form-control" name="bor_status" id="bor_status">
