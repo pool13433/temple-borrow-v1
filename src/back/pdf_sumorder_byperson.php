@@ -37,7 +37,7 @@ ob_start();
         <tr>
             <th style="width: 15%">ชื่อ</th>
             <th style="width: 15%">รหัส</th>
-            <th><?php echo $sql_order; ?></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
