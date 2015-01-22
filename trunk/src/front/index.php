@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <title>Temple Borrow 2014 ระบบยืม คืน ของวัด เหล่าอ้อย</title>
@@ -40,7 +40,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="jumbotron alert alert-link">
-                        <h1>โปรแกรม ยืมคืน วัสดุ</h1>
+                        <h1>ระบบบริหารจัดการของวัด</h1>
                         <p>กรณีศึกษา วัดเหล่าอ้อย</p>
                     </div>
                 </div>
