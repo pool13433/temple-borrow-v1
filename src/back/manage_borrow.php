@@ -86,7 +86,7 @@
                                                         <th style="width: 15px;">จำนวน ที่ยืม</th>
                                                     </tr>                                                        
                                                 </thead>
-                                                <!--<tbody>
+                                                <tbody>
                                                     <?php while ($row_zoom = mysql_fetch_array($query_zoom)) : ?>
                                                         <tr>
                                                             <td><?= $row_zoom['bordet_id'] ?></td>
@@ -101,7 +101,7 @@
                                                             <td><?= $row_zoom['bordet_no'] ?></td>
                                                         </tr>
                                                     <?php endwhile; ?>
-                                                </tbody>-->
+                                                </tbody>
                                             </table>                                            
                                         </div>
                                         <div class="modal-footer">
@@ -121,7 +121,7 @@
                         <td><?= convertDate($row['bor_get'], '/') ?></td>
                         <td><?= convertDate($row['bor_start'], '/') ?></td>
                         <td><?= convertDate($row['bor_end'], '/') ?></td>                        
-                        <td>
+                        <!--<td>
                             <h4>
                                 <label class="label label-success">
                                     รายการธรรมดา <?= $row['count_normal_item'] ?> รายการ
@@ -132,7 +132,7 @@
                                     รายการพิเศษ <?= $row['count_special_item'] ?> รายการ
                                 </label>
                             </h4>
-                        </td>
+                        </td>-->
                         <td>
                             <?php if ($row['bor_status'] == 1): ?>
                                 <label class="label label-warning">รอยืม</label>
