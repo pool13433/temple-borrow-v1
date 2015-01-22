@@ -1,4 +1,4 @@
-<script type="text/javascript" src="../../js/service_script.js"></script>
+﻿<script type="text/javascript" src="../../js/service_script.js"></script>
 <?php
 @ob_start();
 @session_start();
@@ -247,7 +247,7 @@ if (!empty($_GET['id'])) {
                 </div>
                 <div class="panel-footer" style="text-align: center;">
                     <button type="submit" class="btn btn-primary">
-                        <i class="glyphicon glyphicon-ok-sign"></i> แก้ไขข้อมูล
+                        <i class="glyphicon glyphicon-ok-sign"></i> บันทึก
                     </button>
                     <a href="index.php?page=login" class="btn btn-warning">
                         <i class="glyphicon glyphicon-remove-sign"></i> ยกเลิก
