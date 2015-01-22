@@ -1,4 +1,4 @@
-<script type="text/javascript" src="../../js/service_script.js"></script>
+﻿<script type="text/javascript" src="../../js/service_script.js"></script>
 <?php
 include '../../config/app_connect.php';
 if (!empty($_SESSION['person'])):
@@ -213,7 +213,7 @@ endif;
         </div>
         <div class="panel-footer" style="text-align: center;">
             <button type="submit" class="btn btn-primary" onclick="return confirm('ยืนยัน การแก้ไขข้อมูลส่วนตัว')">
-                <i class="glyphicon glyphicon-ok-sign"></i> สมัครสมาชิก
+                <i class="glyphicon glyphicon-ok-sign"></i> บันทึก
             </button>
             <a href="index.php?page=login" class="btn btn-warning">
                 <i class="glyphicon glyphicon-remove-sign"></i> ยกเลิก
