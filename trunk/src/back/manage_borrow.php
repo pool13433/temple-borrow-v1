@@ -1,4 +1,4 @@
-<?php include '../../config/app_connect.php'; ?>
+﻿<?php include '../../config/app_connect.php'; ?>
 <?php $type = ""; ?>
 <div class="panel panel-success">
     <div class="panel-heading">        
@@ -16,7 +16,7 @@
                     <th>วันมารับของ</th>
                     <th>วันใช้งาน</th>
                     <th>วันคืนของ</th>
-                    <th>จำนวนของ / รายการ</th>
+                    <!--<th>จำนวนของ / รายการ</th>-->
                     <th>สถานะการยืม</th>
                     <th>สถานะการอนุมัติ</th>
                     <th style="width: 20%;">ACTION</th>
@@ -86,7 +86,7 @@
                                                         <th style="width: 15px;">จำนวน ที่ยืม</th>
                                                     </tr>                                                        
                                                 </thead>
-                                                <tbody>
+                                                <!--<tbody>
                                                     <?php while ($row_zoom = mysql_fetch_array($query_zoom)) : ?>
                                                         <tr>
                                                             <td><?= $row_zoom['bordet_id'] ?></td>
@@ -101,7 +101,7 @@
                                                             <td><?= $row_zoom['bordet_no'] ?></td>
                                                         </tr>
                                                     <?php endwhile; ?>
-                                                </tbody>
+                                                </tbody>-->
                                             </table>                                            
                                         </div>
                                         <div class="modal-footer">
